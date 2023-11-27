@@ -1,0 +1,24 @@
+git-repository:
+  syncTimeCron: "0/30 * * * * ?"
+  storeDirectory: "D:/demo/job/"
+  repository:
+    url: "http://172.17.189.70/wangyj/riil-sonar.git"
+    branch: "develop"
+    taskFilePath: "/tasks/test-59.yaml"
+    userName: "v-huhouhua"
+    password: "huhouhua"
+docker:
+  host: tcp://172.17.163.194:2375
+#  host: "unix:///var/run/docker.sock"
+  apiVersion: 1.41
+  imageTag: 1.0
+  imageRepository: 172.17.162.231/devops/scanner-job
+sweep:
+  container:
+    timeCron: "0/5 * * * * ?"
+    matches:
+      - ".*sonar.*"
+  image:
+    timeCron: "0/5 * * * * ?"
+    matches:
+      - ".*<none>.*"
