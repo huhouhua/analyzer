@@ -21,9 +21,7 @@ import java.util.concurrent.Callable;
 
 public class ScanTask implements Callable<Integer> {
     private final Logger LOG = LoggerFactory.getLogger(ScanTask.class.getName());
-
     private final Integer QUERY_STATE_DELAY_SECOND = 30 * 1000;  //30秒
-
     private final DockerClientWrapper dockerClientWrapper;
     private final int taskId;
     private final String image;
@@ -51,39 +49,55 @@ public class ScanTask implements Callable<Integer> {
     }
 
     @Override
-    public Integer call() throws Exception {
-        Group group = projectConfig.getGroups().get(taskId);
+    public Integer call() {
+        Group group = this.getGroup();
+        ContainerArgsBuilder builder = this.containerArgsBuilder(group);
+        CreateContainerResponse response = this.startContainer(builder);
+        this.waitRunToComplete(response.getId(), builder.getContainerName());
+        return taskId;
+    }
 
+    private void waitRunToComplete(String containerId, String containerName) {
+        while (true) {
+            try {
+                LOG.info(StrUtil.format("job-id:{} {} query {} container", taskId, containerName, containerId));
+                Container container = dockerClientWrapper.getRunningOfContainerById(containerId);
+                if (container == null) {
+                    dockerClientWrapper.removeContainer(containerId, true);
+                    break;
+                }
+                LOG.info(StrUtil.format("job-id:{} {} container status is {}", taskId, containerName, container.getStatus()));
+                LOG.info(StrUtil.format("job-id:{} {} sleep {} second...........", taskId, containerName, QUERY_STATE_DELAY_SECOND));
+                Thread.sleep(QUERY_STATE_DELAY_SECOND);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                LOG.error(StrUtil.format("job-id:{} container:{} err:{}", taskId, containerName, e.getMessage()));
+                break;
+            }
+        }
+    }
+
+    private CreateContainerResponse startContainer(ContainerArgsBuilder builder) {
+        LOG.info(StrUtil.format("job-id:{} {} run {} image", taskId, builder.getContainerName(), builder.getImageName()));
+        CreateContainerResponse response = dockerClientWrapper.createContainers(builder);
+        LOG.info(StrUtil.format("job-id:{} {} run {} container", taskId, builder.getContainerName(), response.getId()));
+        dockerClientWrapper.startContainer(response.getId());
+        return response;
+    }
+
+    private ContainerArgsBuilder containerArgsBuilder(Group group) {
         ContainerArgsBuilder builder = ContainerArgsBuilder.newBuilder(image).
                 withEnvsMap(generateVariable(group, global)).
                 withContainerName(group.getName());
         if (dockerClientWrapper.getContainerByName(group.getName()) != null) {
             builder.withContainerName(StrUtil.format("{}-{}-{}", group.getName(), DateUtil.current(), taskId));
         }
-        LOG.info(StrUtil.format("job-id:{} {} run {} image", taskId, builder.getContainerName(), builder.getImageName()));
-        CreateContainerResponse response = dockerClientWrapper.createContainers(builder);
-        LOG.info(StrUtil.format("job-id:{} {} run {} container", taskId, builder.getContainerName(), response.getId()));
-        dockerClientWrapper.startContainer(response.getId());
-        while (true) {
-            try {
-                LOG.info(StrUtil.format("job-id:{} {} query {} container", taskId, builder.getContainerName(), response.getId()));
-                Container container = dockerClientWrapper.getRunningOfContainerById(response.getId());
-                if (container == null) {
-                    dockerClientWrapper.removeContainer(response.getId(),true);
-                    break;
-                }
-                LOG.info(StrUtil.format("job-id:{} {} container status is {}", taskId, builder.getContainerName(), container.getStatus()));
-                LOG.info(StrUtil.format("job-id:{} {} sleep {} second...........", taskId, builder.getContainerName(), QUERY_STATE_DELAY_SECOND));
-                Thread.sleep(QUERY_STATE_DELAY_SECOND);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-                LOG.error(StrUtil.format("job-id:{} container:{} err:{}", taskId, builder.getContainerName(), e.getMessage()));
-                break;
-            }
-        }
-        return taskId;
+        return builder;
     }
 
+    private Group getGroup() {
+        return projectConfig.getGroups().get(taskId);
+    }
 
     private Map<String, String> generateVariable(Group group, Global global) {
         Map<String, String> map = new HashMap<>();

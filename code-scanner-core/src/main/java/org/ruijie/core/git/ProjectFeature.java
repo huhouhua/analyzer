@@ -1,13 +1,17 @@
 package org.ruijie.core.git;
+
 import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.NonNull;
-import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.api.PullResult;
+import org.eclipse.jgit.api.*;
 import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.transport.SshSessionFactory;
+import org.eclipse.jgit.transport.SshTransport;
+import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
@@ -28,14 +32,14 @@ public class ProjectFeature implements GitProjectSupport {
         AtomicReference<Git> git = new AtomicReference<>();
         boolean success = this.tryRetry(() -> {
             try {
-                git.set(Git.cloneRepository().
+                CloneCommand command = Git.cloneRepository().
                         setURI(configProvider.getGitUrl()).
                         setBranch(configProvider.getBranch()).
                         setDirectory(configProvider.getProjectFile()).
-                        setCredentialsProvider(configProvider.
-                                getUsernamePasswordCredentialsProvider()).
-                        setProgressMonitor(configProvider.getProgressInstance()).
-                        call());
+                        setProgressMonitor(configProvider.getProgressInstance());
+                   setCredentials(command);
+
+                git.set(command.call());
                 LOG.info("clone succeed!");
                 return true;
             } catch (GitAPIException e) {
@@ -53,14 +57,14 @@ public class ProjectFeature implements GitProjectSupport {
     public PullResult pull() throws Exception {
         this.mkStoreDir();
         AtomicReference<PullResult> git = new AtomicReference<>();
-        boolean success =  this.tryRetry(() -> {
+        boolean success = this.tryRetry(() -> {
             try {
-                git.set(Git.open(configProvider.getProjectFile()).
+                PullCommand command= Git.open(configProvider.getProjectFile()).
                         pull().
-                        setCredentialsProvider(configProvider.getUsernamePasswordCredentialsProvider()).
                         setRemoteBranchName(configProvider.getBranch()).
-                        setProgressMonitor(configProvider.getProgressInstance()).
-                        call());
+                        setProgressMonitor(configProvider.getProgressInstance());
+                setCredentials(command);
+                git.set(command.call());
                 LOG.info("pull succeed!");
                 return true;
             } catch (GitAPIException | IOException e) {
@@ -73,6 +77,22 @@ public class ProjectFeature implements GitProjectSupport {
             throw new Exception("git clone fail");
         }
         return git.get();
+    }
+
+    private void setCredentials(TransportCommand transportCommand) {
+        SshSessionFactory sessionFactory = configProvider.getCredentialsConfigProvider().getCredentialsConfig(SshSessionFactory.class);
+        if (sessionFactory != null) {
+            transportCommand.setTransportConfigCallback(transport -> {
+                SshTransport sshTransport = (SshTransport) transport;
+                sshTransport.setSshSessionFactory(sessionFactory);
+            });
+            return;
+        }
+        UsernamePasswordCredentialsProvider usernamePasswordCredentialsProvider =
+                configProvider.getCredentialsConfigProvider().getCredentialsConfig(UsernamePasswordCredentialsProvider.class);
+        if (usernamePasswordCredentialsProvider != null) {
+            transportCommand.setCredentialsProvider(usernamePasswordCredentialsProvider);
+        }
     }
 
     private void mkStoreDir() {

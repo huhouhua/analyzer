@@ -4,9 +4,6 @@
   <component name="MavenProjectsManager">
     <option name="originalFiles">
       <list>
-        <option value="$PROJECT_DIR$/code-scanner-scheduler/pom.xml" />
-        <option value="$PROJECT_DIR$/code-scanner-job/pom.xml" />
-        <option value="$PROJECT_DIR$/code-scanner-core/pom.xml" />
         <option value="$PROJECT_DIR$/pom.xml" />
       </list>
     </option>

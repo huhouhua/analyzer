@@ -5,8 +5,7 @@ git-repository:
     url: "http://172.17.189.70/wangyj/riil-sonar.git"
     branch: "develop"
     taskFilePath: "/tasks/test-59.yaml"
-    userName: "v-huhouhua"
-    password: "huhouhua"
+    privateKeyFilePath: "/etc/git/private_key"
 docker:
   host: tcp://172.17.163.194:2375
 #  host: "unix:///var/run/docker.sock"

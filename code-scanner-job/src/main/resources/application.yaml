@@ -1,8 +1,7 @@
 git:
 #   username: "v-huhouhua"
 #   password: "huhouhua"
-   username: "v-huhouhua@ruijie.com.cn"
-   password: "12345678"
+   privateKeyFilePath: "/etc/git/private_key"
 store:
   directory: "/etc/sonars/jobs"
 #  directory: "I:\\test\\project"

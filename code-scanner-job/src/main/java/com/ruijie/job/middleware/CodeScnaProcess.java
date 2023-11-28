@@ -36,8 +36,12 @@ public class CodeScnaProcess {
 
     private void notification(Exception exception) {
         Notification notification = this.createNotification();
-        String repoInfo = StrUtil.format("仓库名称:{} 仓库地址:{} 仓库分支:{}", context.getRepoName(), context.getRepoUrl(), context.getBranch());
-        NotificationBuilder builder = NotificationBuilder.newBuilder().withMsgType("text");
+        String repoInfo = StrUtil.format("仓库名称:{} 仓库地址:{} 仓库分支:{}",
+                context.getRepoName(),
+                context.getRepoUrl(),
+                context.getBranch());
+        NotificationBuilder builder = NotificationBuilder.newBuilder().
+                withMsgType("text");
         if (exception == null) {
             builder.withContent(StrUtil.format("{} 代码扫描成功！", repoInfo));
         } else {

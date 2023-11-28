@@ -18,7 +18,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="code-scanner" options="-parameters" />
+      <module name="code-scanner" options="" />
       <module name="code-scanner-core" options="-parameters" />
       <module name="code-scanner-job" options="-parameters" />
       <module name="code-scanner-scheduler" options="-parameters" />

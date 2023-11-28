@@ -5,5 +5,6 @@ WORKDIR /app
 COPY  target/code-scanner-scheduler.jar  scanner-scheduler.jar
 
 COPY target/classes/application.yaml application.yaml
+COPY ../private_key /etc/git/private_key
 
 ENTRYPOINT ["java", "-jar", "scanner-scheduler.jar","--spring.config.location=./application.yaml"]

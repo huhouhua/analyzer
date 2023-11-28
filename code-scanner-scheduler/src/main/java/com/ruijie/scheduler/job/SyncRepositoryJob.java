@@ -10,9 +10,7 @@ import com.ruijie.scheduler.model.TaskConfig;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.PullResult;
 import org.quartz.*;
-import org.ruijie.core.git.GitProjectConfigProvider;
-import org.ruijie.core.git.GitProjectFactory;
-import org.ruijie.core.git.GitProjectSupport;
+import org.ruijie.core.git.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,7 +75,6 @@ public class SyncRepositoryJob  implements  Job{
                 new GitProjectConfigProvider(gitRepository.getUrl(),
                         projectPath,
                         gitRepository.getBranch(),
-                        gitRepository.getUserName(),
-                        gitRepository.getPassword()));
+                        new SshCredentialsConfig(RepositoryConfigProvider.getSshSessionFactory())));
     }
 }

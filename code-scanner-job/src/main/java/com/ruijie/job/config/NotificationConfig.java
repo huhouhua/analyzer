@@ -22,7 +22,4 @@ public class NotificationConfig {
                 "webhook='" + webhook + '\'' +
                 '}';
     }
-
-
-    
 }
