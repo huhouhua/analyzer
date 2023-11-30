@@ -104,7 +104,7 @@ public class ProjectFeature implements GitProjectSupport {
         }
     }
 
-    private boolean tryRetry(ExecuteFunction execute) {
+    private boolean tryRetry(ExecuteFunction function) {
         AtomicInteger currentAttempt = new AtomicInteger(0);
         Predicate<Boolean> retryLogic = isSuccess -> {
             if (!isSuccess && currentAttempt.get() < MAX_ATTEMPTS) {
@@ -126,7 +126,7 @@ public class ProjectFeature implements GitProjectSupport {
         boolean success = false;
         while (retryLogic.test(success)) {
             // 执行需要重试的逻辑
-            success = execute.run();
+            success = function.run();
         }
         return success;
     }
