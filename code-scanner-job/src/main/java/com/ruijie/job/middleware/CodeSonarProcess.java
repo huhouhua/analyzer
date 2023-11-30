@@ -10,15 +10,14 @@ import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 
 import java.util.function.Consumer;
 
-public class CodeScnaProcess {
-    private final ScanContext context;
-    private static Consumer<ScanContext> middleware;
+public class CodeSonarProcess {
+    private final SonarContext context;
+    private static Consumer<SonarContext> middleware;
     private static AutowireCapableBeanFactory beanFactory;
-
-    CodeScnaProcess(AutowireCapableBeanFactory autowireCapableBeanFactory, ScanContext scanContext) {
+    CodeSonarProcess(AutowireCapableBeanFactory autowireCapableBeanFactory, SonarContext scanContext) {
         context = scanContext;
         beanFactory = autowireCapableBeanFactory;
-        middleware = MiddlewareFactory.<ScanContext>CreateDefaultWithGeneric().
+        middleware = MiddlewareFactory.<SonarContext>CreateDefaultWithGeneric().
                 use(createInitRepositoryMiddleware()).
                 use(createConfigParseMiddleware()).
                 use(createCodeScanMiddleware()).
@@ -36,29 +35,30 @@ public class CodeScnaProcess {
 
     private void notification(Exception exception) {
         Notification notification = this.createNotification();
-        String repoInfo = StrUtil.format("仓库名称:{} 仓库地址:{} 仓库分支:{}",
-                context.getRepoName(),
-                context.getRepoUrl(),
-                context.getBranch());
+        String repoInfo = StrUtil.format("*************通知*************\n仓库名称:{}\n仓库地址:{}\n仓库分支:{}\nsonar地址:{}",
+                context.getProject().getName(),
+                context.getProject().getUrl(),
+                context.getProject().getBranch(),
+                context.getSonar().getUrl());
         NotificationBuilder builder = NotificationBuilder.newBuilder().
                 withMsgType("text");
         if (exception == null) {
-            builder.withContent(StrUtil.format("{} 代码扫描成功！", repoInfo));
+            builder.withContent(StrUtil.format("{}\n结果:扫描成功！", repoInfo));
         } else {
-            builder.withContent(StrUtil.format("{} 错误消息:{} 代码扫描失败！", repoInfo, exception.getMessage()));
+            builder.withContent(StrUtil.format("{}\n结果:扫描失败!\n错误消息:{}", repoInfo, exception.getMessage()));
         }
         notification.send(builder);
     }
-
+    
     private Notification createNotification() {
         final Notification notification = beanFactory.createBean(Notification.class);
         beanFactory.autowireBean(notification);
         return notification;
     }
 
-    public static CodeScnaProcess prepare(@NonNull ScanContext scanContext,
-                                          @NonNull AutowireCapableBeanFactory beanFactory) {
-        return new CodeScnaProcess(beanFactory, scanContext);
+    public static CodeSonarProcess prepare(@NonNull SonarContext scanContext,
+                                           @NonNull AutowireCapableBeanFactory beanFactory) {
+        return new CodeSonarProcess(beanFactory, scanContext);
     }
 
     private InitRepositoryMiddleware createInitRepositoryMiddleware() {
@@ -73,8 +73,8 @@ public class CodeScnaProcess {
         return middleware;
     }
 
-    private CodeScanMiddleware createCodeScanMiddleware() {
-        final CodeScanMiddleware middleware = beanFactory.createBean(CodeScanMiddleware.class);
+    private CodeSonarMiddleware createCodeScanMiddleware() {
+        final CodeSonarMiddleware middleware = beanFactory.createBean(CodeSonarMiddleware.class);
         beanFactory.autowireBean(middleware);
         return middleware;
     }

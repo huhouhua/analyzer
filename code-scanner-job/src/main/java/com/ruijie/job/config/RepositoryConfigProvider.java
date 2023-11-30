@@ -7,7 +7,6 @@ import org.ruijie.core.git.GitConfigSessionFactory;
 import java.io.FileNotFoundException;
 
 public class RepositoryConfigProvider {
-
     public static void initGitConfig(@NonNull GitRepositoryConfig gitRepository) throws FileNotFoundException {
         SshSessionFactory.setInstance(new GitConfigSessionFactory(gitRepository.getPrivateKeyFilePath()));
     }

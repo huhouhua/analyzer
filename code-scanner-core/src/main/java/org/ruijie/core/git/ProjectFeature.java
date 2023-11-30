@@ -38,7 +38,6 @@ public class ProjectFeature implements GitProjectSupport {
                         setDirectory(configProvider.getProjectFile()).
                         setProgressMonitor(configProvider.getProgressInstance());
                    setCredentials(command);
-
                 git.set(command.call());
                 LOG.info("clone succeed!");
                 return true;
@@ -79,7 +78,7 @@ public class ProjectFeature implements GitProjectSupport {
         return git.get();
     }
 
-    private void setCredentials(TransportCommand transportCommand) {
+    private  void setCredentials(TransportCommand transportCommand) {
         SshSessionFactory sessionFactory = configProvider.getCredentialsConfigProvider().getCredentialsConfig(SshSessionFactory.class);
         if (sessionFactory != null) {
             transportCommand.setTransportConfigCallback(transport -> {

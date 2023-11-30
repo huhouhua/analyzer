@@ -2,7 +2,9 @@ package com.ruijie.scheduler.job;
 
 import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ruijie.scheduler.config.JobConfig;
 import com.ruijie.scheduler.config.SchedulerDockerConfig;
+import com.ruijie.scheduler.config.SonarConfigProvider;
 import com.ruijie.scheduler.model.*;
 import org.quartz.*;
 import org.ruijie.core.docker.DockerClientWrapper;
@@ -18,16 +20,19 @@ import java.util.concurrent.*;
 @Component
 @DisallowConcurrentExecution
 @PersistJobDataAfterExecution
-public class CodeScanJob implements Job {
-    private final Logger LOG = LoggerFactory.getLogger(CodeScanJob.class.getName());
+public class CodeSonarJob implements Job {
+    private final Logger LOG = LoggerFactory.getLogger(CodeSonarJob.class.getName());
     private final Integer MAX_WAIT_TIME_SECOND = 2 * 60 * 60; // 2小时的最大等待时长，单位为秒
     private final DockerClientWrapper dockerClientWrapper;
     private final ObjectMapper mapper;
-    private final SchedulerDockerConfig dockerConfig;
+    private  final JobConfig jobConfig;
+    private  final SonarConfigProvider sonarConfigProvider;
+
     @Autowired
-    public CodeScanJob(SchedulerDockerConfig dockerConfig, ObjectMapper objectMapper) {
-        this.dockerConfig = dockerConfig;
+    public CodeSonarJob(SchedulerDockerConfig dockerConfig, SonarConfigProvider sonarConfigProvider, JobConfig jobConfig, ObjectMapper objectMapper) {
+        this.jobConfig = jobConfig;
         this.mapper = objectMapper;
+        this.sonarConfigProvider =sonarConfigProvider;
         this.dockerClientWrapper = DockerClientWrapper.newWrapper(dockerConfig);
     }
 
@@ -38,19 +43,19 @@ public class CodeScanJob implements Job {
         try {
             TaskConfig taskConfig = mapper.readValue(taskStr.getBytes(), TaskConfig.class);
             dockerClientWrapper.printDockerInfo();
-            for (ProjectConfig project : taskConfig.getProject()) {
-                Integer parallel = (project.getParallel() == null || project.getParallel() == 0)
-                        ? taskConfig.getGlobal().getParallel() : project.getParallel();
+            for (Group group : taskConfig.getGroups()) {
+                Integer parallel = (group.getParallel() == null || group.getParallel() == 0)
+                        ? taskConfig.getGlobal().getParallel() : group.getParallel();
 
-                this.start(project, taskConfig.getGlobal(), parallel);
+                this.start(group, taskConfig.getGlobal(), parallel);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private void start(ProjectConfig projectConfig, Global global, Integer batchSize) {
-        int totalTasks = projectConfig.getGroups().size();
+    private void start(Group group, Global global, Integer batchSize) {
+        int totalTasks = group.getProjects().size();
         // 创建线程池
         ExecutorService executor  = Executors.newFixedThreadPool(batchSize);
         // 创建完成服务
@@ -58,7 +63,7 @@ public class CodeScanJob implements Job {
 
         for (int i = 0; i < totalTasks; i++) {
             // 提交任务到完成服务
-            completionService.submit(ScanTask.newTask(i, dockerConfig.getImage(), projectConfig, global, dockerClientWrapper));
+            completionService.submit(SonarTask.newTask(i, jobConfig.toImage(), sonarConfigProvider, group, global, dockerClientWrapper));
             // 每批任务等待完成后继续提交下一批任务
             if ((i + 1) % batchSize == 0) {
                waitForCompletion(completionService, batchSize);

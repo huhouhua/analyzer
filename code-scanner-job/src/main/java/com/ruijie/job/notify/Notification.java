@@ -44,6 +44,7 @@ public class Notification {
                 LOG.error(StrUtil.format("notify {} fail! detail:{}", result.getMsg(), result.toString()));
             }
         } catch (JsonProcessingException e) {
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }

@@ -1,10 +1,9 @@
 package com.ruijie.job;
 
 import com.ruijie.job.config.GitRepositoryConfig;
-import com.ruijie.job.config.ProjectConfigProvider;
 import com.ruijie.job.config.RepositoryConfigProvider;
-import com.ruijie.job.middleware.CodeScnaProcess;
-import com.ruijie.job.middleware.ScanContext;
+import com.ruijie.job.middleware.CodeSonarProcess;
+import com.ruijie.job.middleware.SonarContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -28,26 +27,20 @@ public class StartApplicationListener implements ApplicationContextAware, Applic
     public  StartApplicationListener(GitRepositoryConfig gitRepositoryConfig) throws FileNotFoundException {
         this.initialize(gitRepositoryConfig);
     }
-
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
         try {
             LOG.info("start job");
-           CodeScnaProcess.prepare(this.createContext(),beanFactory).run();
+           CodeSonarProcess.prepare(this.createContext(),beanFactory).run();
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
-    private ScanContext createContext(){
-        return  new ScanContext(
-                ProjectConfigProvider.getRepoName(),
-                ProjectConfigProvider.getRepoUrl(),
-                ProjectConfigProvider.getBranch(),
-                ProjectConfigProvider.getSonarFileUrl(),
-                ProjectConfigProvider.getMode(),
-                ProjectConfigProvider.getDescription()
-        );
+    private SonarContext createContext(){
+        final SonarContext context = beanFactory.createBean(SonarContext.class);
+        beanFactory.autowireBean(context);
+        return context;
     }
     @Override
     public void setApplicationContext(final ApplicationContext context) throws BeansException {

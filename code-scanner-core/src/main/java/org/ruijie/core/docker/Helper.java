@@ -4,6 +4,7 @@ import cn.hutool.core.util.StrUtil;
 
 import java.io.*;
 import java.util.*;
+import java.util.regex.Matcher;
 
 class Helper {
 
@@ -17,7 +18,7 @@ class Helper {
         String line = null;
         while ( (line = bufIn.readLine()) != null) {
             // 替换每行中, 符合条件的字符串
-            line = line.replaceAll(patternString, replaceStr);
+            line = line.replaceAll(patternString, Matcher.quoteReplacement(replaceStr));
             // 将该行写入内存
             tempStream.write(line);
             // 添加换行符

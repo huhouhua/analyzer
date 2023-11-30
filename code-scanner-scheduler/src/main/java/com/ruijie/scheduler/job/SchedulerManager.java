@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 
 @Component
@@ -40,7 +39,6 @@ public class SchedulerManager {
     public void set(@NonNull TaskConfig taskConfig) throws SchedulerException {
         CronTrigger trigger = (CronTrigger) scheduler.getTrigger(triggerKey);
         taskConfigStr = JSONUtil.toJsonStr(taskConfig);
-
         String timeCron = taskConfig.getGlobal().getTriggerTimeCron();
         if (trigger == null) {
             LOG.info(StrUtil.format("start schedule job! cron set is {}!", timeCron));
@@ -58,7 +56,7 @@ public class SchedulerManager {
     private JobDetail createJobFromBase(JobDetail job, String taskStr) {
         return job.
                 getJobBuilder().
-                ofType(CodeScanJob.class).
+                ofType(CodeSonarJob.class).
                 usingJobData(TASK_KEY, taskStr).
                 build();
     }
@@ -70,7 +68,7 @@ public class SchedulerManager {
     }
 
     private JobDetail createJob(String taskStr) {
-        return JobBuilder.newJob(CodeScanJob.class).
+        return JobBuilder.newJob(CodeSonarJob.class).
                 withIdentity(jobKey).
                 usingJobData(TASK_KEY, taskStr).
                 withDescription("code git repository").
@@ -97,6 +95,9 @@ public class SchedulerManager {
 
     private void updateJobCron(CronTrigger trigger, String timeCron) {
         try {
+            if (timeCron.isEmpty()){
+                return;
+            }
 //            JobDetail newJobDetail = this.createJobFromBase(scheduler.getJobDetail(jobKey),taskStr);
             if (currentTriggerCron.equals(timeCron)) {
                 return;

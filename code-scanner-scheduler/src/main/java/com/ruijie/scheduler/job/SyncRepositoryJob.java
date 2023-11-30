@@ -41,7 +41,9 @@ public class SyncRepositoryJob  implements  Job{
      try {
          boolean exist = FileUtil.exist(projectPath);
          if (!exist){
-             Git git = gitProjectSupport.gitClone();
+             LOG.info("******************* start clone *******************");
+             LOG.info(StrUtil.format("clone to {}..............",projectPath));
+             gitProjectSupport.gitClone();
          }else{
              PullResult result = gitProjectSupport.pull();
              if (!result.isSuccessful()){
@@ -49,10 +51,12 @@ public class SyncRepositoryJob  implements  Job{
              }
          }
          TaskConfig taskConfig = this.readTask();
-         container.set(taskConfig);
+         if (!taskConfig.getGlobal().getTriggerTimeCron().isEmpty()){
+             container.set(taskConfig);
+         }
      }catch (JsonProcessingException e){
          e.printStackTrace();
-         LOG.info(e.getMessage());
+         LOG.error(e.getMessage());
      }
      catch (Exception e) {
          throw new RuntimeException(e);
@@ -61,7 +65,7 @@ public class SyncRepositoryJob  implements  Job{
     private TaskConfig  readTask() throws JsonProcessingException {
         String path = StrUtil.format("{}{}",projectPath,gitRepository.getTaskFilePath());
         if (!FileUtil.exist(path)){
-             LOG.warn("project file task not exist !");
+             LOG.warn(String.format("%s project file task not exist!",path));
         }
         String content = FileUtil.readUtf8String(path);
        return  objectMapper.readValue(content,TaskConfig.class);
@@ -70,7 +74,6 @@ public class SyncRepositoryJob  implements  Job{
         projectPath = StrUtil.format("{}{}",
                 repositoryConfig.getStoreDirectory(),
                 FileUtil.mainName(gitRepository.getUrl()));
-
         return GitProjectFactory.createFeatureInstance(
                 new GitProjectConfigProvider(gitRepository.getUrl(),
                         projectPath,

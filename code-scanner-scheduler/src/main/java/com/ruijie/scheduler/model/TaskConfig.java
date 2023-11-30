@@ -1,8 +1,6 @@
 package com.ruijie.scheduler.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.NonNull;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
@@ -12,29 +10,29 @@ public class TaskConfig {
    private  Global global;
 
 //    @JsonProperty("project")
-    private ProjectConfig[] project;
+    private Group[] groups;
 
     public void setGlobal(@NonNull Global global) {
         this.global = global;
     }
 
-    public void setProject(@NonNull ProjectConfig[] project) {
-        this.project = project;
+    public void setGroups(@NonNull Group[] groups) {
+        this.groups = groups;
     }
 
     public Global getGlobal() {
       return  this.global;
     }
 
-    public ProjectConfig[] getProject() {
-      return  this.project;
+    public Group[] getGroups() {
+      return  this.groups;
     }
 
     @Override
     public String toString() {
         return "TaskConfig{" +
                 "global=" + global +
-                ", project=" + Arrays.toString(project) +
+                ", groups=" + Arrays.toString(groups) +
                 '}';
     }
 }

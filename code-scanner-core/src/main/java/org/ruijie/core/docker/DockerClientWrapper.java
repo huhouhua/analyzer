@@ -10,6 +10,7 @@ import com.github.dockerjava.core.DockerClientImpl;
 import com.github.dockerjava.httpclient5.ApacheDockerHttpClient;
 import com.github.dockerjava.transport.DockerHttpClient;
 import lombok.NonNull;
+import org.ruijie.core.SonarConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +34,6 @@ public class DockerClientWrapper {
     public  static  final List<String> exitedStatus = Collections.singletonList(EXITED_TAG);
 
     private  static  final  String  DOCKER_SOCK_PATH="/var/run/docker.sock";
-    private  static  final  String DOCKER_FILE_REPLAC_VARIABLE="-Dsonar.branch.name";
     private  static  final  String DOCKER_FILE_REPLAC_PATTERNSTRING ="\\$\\{SONAR_ARGS\\}";
     private final DockerClientConfig config;
 
@@ -84,6 +84,11 @@ public class DockerClientWrapper {
                 withStatusFilter(exitedStatus).
                 exec();
     }
+    public  List<Container> getRunningOfContainerByList(){
+        return dockerClient.listContainersCmd().
+                withStatusFilter(runningStatus).
+                exec();
+    }
 
     public void startContainer(String containerId) {
         dockerClient.
@@ -118,16 +123,16 @@ public class DockerClientWrapper {
                 exec();
     }
 
-    public String buildImageFromSonar(String tag,  String dsonarBranch, File dockerfile) throws IOException {
+    public String buildImageFromSonar(String tag, SonarConfig sonarConfig, File dockerfile) throws IOException {
         // 获取工作目录的绝对路径
         String workspaceDirectory = Paths.get(dockerfile.getAbsolutePath(), "../../..").
                 normalize().
                 toAbsolutePath().
                 toString();
-        if (!dsonarBranch.isEmpty()) {
-            Helper.replacTextContent(dockerfile, DOCKER_FILE_REPLAC_PATTERNSTRING,
-                    StrUtil.format("{}={}", DOCKER_FILE_REPLAC_VARIABLE,dsonarBranch));
-        }
+         LOG.info(sonarConfig.toString());
+         String sonarArgs =  DockerSonarArgsBuilder.newBuilder(sonarConfig).buildOfAll();
+         LOG.info(sonarArgs);
+        Helper.replacTextContent(dockerfile, DOCKER_FILE_REPLAC_PATTERNSTRING, sonarArgs);
         return buildImage(tag,new File(workspaceDirectory), dockerfile);
     }
 

@@ -1,0 +1,23 @@
+git:
+  privateKeyFilePath: "I:\\tool\\code-scanner\\private_key"
+store:
+  directory: "I:\\test\\project\\appserver2\\"
+docker:
+  host: tcp://172.17.163.197:2375
+  apiVersion: 1.41
+notification:
+  webhook: "https://open.feishu.cn/open-apis/bot/v2/hook/ed495d44-4048-4bb9-afd8-233235b53437"
+default:
+  project:
+    name: appserver
+    url: "git@172.17.189.70:riil-insight/riil-insight-appserver.git"
+    branch: "develop"
+    sonarFileUrl: "release\\docker\\SonarDockerfile"
+    mode: "Dockerfile"
+    description: "riil-insight-appserver"
+  sonar:
+    enable: true
+    url: "http://172.17.206.162:30090"
+    login: admin
+    password: "3ed$RF5tg"
+#  docker run -ti  --name appserver -e JOB_PROJECT_NAME=test -e JOB_PROJECT_URL=git@172.17.189.70:riil-insight/riil-insight-appserver.git  -e JOB_PROJECT_BRANCH=develop  -e JOB_PROJECT_FILE_URL=release/docker/SonarDockerfile -e JOB_PROJECT_MODE=dockerfile -e JOB_PROJECT_DESCRIPTION=test    -e SONAR_ENABLE=true  -e SONAR_URL=http://172.17.206.162:30090   -e SONAR_LOGIN=admin -e SONAR_PASSWORD=3ed$RF5tg  172.17.162.231/devops/scanner-job:1.0

@@ -1,34 +1,75 @@
 package com.ruijie.job.config;
 
-import org.ruijie.core.ProjectConfigContract;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+@Component
+@ConfigurationProperties(prefix = "default.project")
 public class ProjectConfigProvider {
-    public  static String getRepoUrl(){
-//        return  "http://172.17.189.70/riil-insight/riil-insight-appserver.git";
+    private  String name;
+    private String url;
+    private String branch;
+    private String sonarFileUrl;
+    private String mode;
+    private String description;
 
-   return  System.getenv(ProjectConfigContract.REPO_URL_TAG);
-
-    }
-    public  static String getBranch(){
-//        return  "develop";
-        return  System.getenv(ProjectConfigContract.BRANCH_TAG);
-    }
-    public static   String getSonarFileUrl(){
-//        return  "release\\docker\\SonarDockerfile";
-      return  System.getenv(ProjectConfigContract.SONAR_FILE_URL_TAG);
-    }
-    public  static String getMode(){
-//        return  "Dockerfile";
-      return  System.getenv(ProjectConfigContract.SONAR_MODE_TAG);
-    }
-    public  static String getDescription(){
-//        return  "appserver";
-    return  System.getenv(ProjectConfigContract.PROJECT_DESCRIPTION_TAG);
+    public String getUrl() {
+        return this.url;
     }
 
-    public  static String getRepoName(){
-//        return  "appserver";
-        return  System.getenv(ProjectConfigContract.REPO_NAME);
+    public String getName() {
+        return this.name;
     }
+
+    public String getBranch() {
+        return this.branch;
+    }
+
+    public String getSonarFileUrl() {
+        return this.sonarFileUrl;
+    }
+
+    public String getMode() {
+        return this.mode;
+    }
+
+    public String getDescription() {
+        return this.description;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public void setBranch(String branch) {
+        this.branch = branch;
+    }
+
+    public void setSonarFileUrl(String sonarFileUrl) {
+        this.sonarFileUrl = sonarFileUrl;
+    }
+
+    public void setMode(String mode) {
+        this.mode = mode;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    @Override
+    public String toString() {
+        return "ProjectConfigProvider{" +
+                "url='" + url + '\'' +
+                ", branch='" + branch + '\'' +
+                ", sonarFileUrl='" + sonarFileUrl + '\'' +
+                ", mode='" + mode + '\'' +
+                ", description='" + description + '\'' +
+                '}';
+    }
+
 }
