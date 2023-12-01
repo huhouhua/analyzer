@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/analyzer-core/analyzer-core.iml" filepath="$PROJECT_DIR$/analyzer-core/analyzer-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/analyzer-job/analyzer-job.iml" filepath="$PROJECT_DIR$/analyzer-job/analyzer-job.iml" />
+      <module fileurl="file://$PROJECT_DIR$/analyzer-scheduler/analyzer-scheduler.iml" filepath="$PROJECT_DIR$/analyzer-scheduler/analyzer-scheduler.iml" />
+      <module fileurl="file://$PROJECT_DIR$/code-analyzer.iml" filepath="$PROJECT_DIR$/code-analyzer.iml" />
+    </modules>
+  </component>
+</project>

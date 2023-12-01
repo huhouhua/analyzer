@@ -1,0 +1,37 @@
+git-repository:
+  syncTimeCron: "0/30 * * * * ?"
+  storeDirectory: "D:/demo/job/"
+  repository:
+    url: "git@172.17.189.70:wangyj/riil-sonar.git"
+    branch: "develop"
+    taskFilePath: "/tasks/main.yaml"
+    privateKeyFilePath: "I:\\tool\\code-analyzer\\analyzer-scheduler\\private_key"
+docker:
+  host: tcp://172.17.163.197:2375
+  apiVersion: 1.41
+scheduler:
+  maxParallel: 10
+  maxJobWaitTimeSecond: 7200 # 2小时的最大等待时长，单位为秒
+job:
+  tag: 1.0
+  repository: 172.17.162.231/devops/analyzer-job
+sweep:
+  matchExpressions:
+    operator: NotIn
+    values:
+      - ".*scanner-job.*"
+  container:
+    timeCron: "0/5 * * * * ?"
+    timeoutHours: 1
+    matches:
+      - ".*scanner-job.*"
+      - ".*sonar.*"
+  image:
+    timeCron: "0/5 * * * * ?"
+    matches:
+      - ".*<none>.*"
+sonar:
+  enable: true
+  url: "http://172.17.206.162:30090"
+  login: "admin"
+  password: "3ed$RF5tg"

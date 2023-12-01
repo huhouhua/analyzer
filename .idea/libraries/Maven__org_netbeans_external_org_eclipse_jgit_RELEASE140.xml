@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.netbeans.external:org-eclipse-jgit:RELEASE140">
+    <CLASSES>
+      <root url="jar://F:/maven/repository/org/netbeans/external/org-eclipse-jgit/RELEASE140/org-eclipse-jgit-RELEASE140.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://F:/maven/repository/org/netbeans/external/org-eclipse-jgit/RELEASE140/org-eclipse-jgit-RELEASE140-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://F:/maven/repository/org/netbeans/external/org-eclipse-jgit/RELEASE140/org-eclipse-jgit-RELEASE140-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
