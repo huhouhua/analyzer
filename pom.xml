@@ -9,17 +9,15 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.ruijie</groupId>
-    <artifactId>code-scanner</artifactId>
+    <artifactId>code-analyzer</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>code-scanner</name>
-    <description>Code scanner project for Spring Boot</description>
-    <!--修改父项目的打包方式为pom-->
+    <name>code-analyzer</name>
+    <description>Code analyzer project for Spring Boot</description>
     <packaging>pom</packaging>
-    <!--添加子模块到父项目-->
     <modules>
-        <module>code-scanner-job</module>
-        <module>code-scanner-scheduler</module>
-        <module>code-scanner-core</module>
+        <module>analyzer-job</module>
+        <module>analyzer-scheduler</module>
+        <module>analyzer-core</module>
     </modules>
     <properties>
         <java.version>1.8</java.version>
@@ -82,15 +80,6 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-    <!--    <build>-->
-    <!--        <plugins>-->
-    <!--            <plugin>-->
-    <!--                <groupId>org.springframework.boot</groupId>-->
-    <!--                <artifactId>spring-boot-maven-plugin</artifactId>-->
-    <!--            </plugin>-->
-    <!--        </plugins>-->
-    <!--    </build>-->
-
     <build>
 
         <plugins>
@@ -103,7 +92,5 @@
                 </configuration>
             </plugin>
         </plugins>
-
     </build>
-
 </project>
