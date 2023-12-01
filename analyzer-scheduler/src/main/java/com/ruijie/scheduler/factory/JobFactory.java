@@ -5,7 +5,7 @@ import org.quartz.JobDetail;
 import org.quartz.Trigger;
 import org.quartz.TriggerKey;
 
-public interface JobProvider {
+public interface JobFactory {
 
     JobDetail createJob();
 

@@ -5,7 +5,7 @@ import com.ruijie.scheduler.job.SweepContainerJob;
 import lombok.NonNull;
 import org.quartz.*;
 
-public class SweepContainerJobFactory  implements JobProvider {
+public class SweepContainerJobFactory implements JobFactory {
     private static final String SWEEP_JOB_KEY = "container";
     private static final String SWEEP_JOB_GROUP = "sweep-1";
     private static final String  TRIGGER_NAME   = "sweep-container";

@@ -5,7 +5,7 @@ import com.ruijie.scheduler.model.RepositoryConfig;
 import lombok.NonNull;
 import org.quartz.*;
 
-public class SyncJobFactory  implements JobProvider {
+public class SyncJobFactory implements JobFactory {
     private static final String SYNC_REPO_JOB_KEY = "sync-riil-sonar";
     private static final String SYNC_REPO_JOB_GROUP = "sync";
     private static final String  TRIGGER_NAME   = "git-repo";

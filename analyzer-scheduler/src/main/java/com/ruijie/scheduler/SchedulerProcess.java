@@ -2,7 +2,7 @@ package com.ruijie.scheduler;
 
 import com.ruijie.scheduler.config.RepositoryConfigProvider;
 import com.ruijie.scheduler.config.SweepConfig;
-import com.ruijie.scheduler.factory.JobProvider;
+import com.ruijie.scheduler.factory.JobFactory;
 import com.ruijie.scheduler.factory.SweepContainerJobFactory;
 import com.ruijie.scheduler.factory.SweepImageJobFactory;
 import com.ruijie.scheduler.factory.SyncJobFactory;
@@ -19,7 +19,7 @@ import java.util.List;
 @Component
 public class SchedulerProcess {
     private final org.quartz.Scheduler scheduler;
-    private final List<JobProvider> jobProviderList = new ArrayList<>();
+    private final List<JobFactory> jobFactoryList = new ArrayList<>();
 
     @Autowired
     public SchedulerProcess(org.quartz.Scheduler scheduler,
@@ -40,7 +40,7 @@ public class SchedulerProcess {
     }
 
     private void prepare() throws SchedulerException {
-        for (JobProvider provider : jobProviderList) {
+        for (JobFactory provider : jobFactoryList) {
             TriggerKey triggerKey = provider.createTriggerKey();
             Trigger trigger = scheduler.getTrigger(triggerKey);
             scheduler.scheduleJob(provider.createJob(),
@@ -49,9 +49,9 @@ public class SchedulerProcess {
     }
 
     private void initialize(SweepConfig sweepConfig, RepositoryConfigProvider provider) throws FileNotFoundException {
-        jobProviderList.add(new SyncJobFactory(provider.getConfig()));
-        jobProviderList.add(new SweepContainerJobFactory(sweepConfig.getContainer()));
-        jobProviderList.add(new SweepImageJobFactory(sweepConfig.getImage()));
+        jobFactoryList.add(new SyncJobFactory(provider.getConfig()));
+        jobFactoryList.add(new SweepContainerJobFactory(sweepConfig.getContainer()));
+        jobFactoryList.add(new SweepImageJobFactory(sweepConfig.getImage()));
         RepositoryConfigProvider.initGitConfig(provider.getConfig().getRepository());
     }
 }

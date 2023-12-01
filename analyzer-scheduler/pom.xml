@@ -10,7 +10,7 @@
     <artifactId>analyzer-scheduler</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>analyzer-scheduler</name>
-    <description>code-scanner-scheduler</description>
+    <description>analyzer-scheduler</description>
     <dependencies>
         <dependency>
             <groupId>com.ruijie</groupId>
@@ -25,16 +25,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-quartz</artifactId>
             <version>3.0.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-configuration-processor</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

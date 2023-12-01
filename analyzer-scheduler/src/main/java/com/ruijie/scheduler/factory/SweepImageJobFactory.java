@@ -5,7 +5,7 @@ import com.ruijie.scheduler.job.SweepImageJob;
 import lombok.NonNull;
 import org.quartz.*;
 
-public class SweepImageJobFactory  implements  JobProvider{
+public class SweepImageJobFactory implements JobFactory {
     private static final String SWEEP_JOB_KEY = "image";
     private static final String SWEEP_JOB_GROUP = "sweep-2";
     private static final String  TRIGGER_NAME   = "sweep-image";
