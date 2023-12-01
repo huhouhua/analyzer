@@ -24,6 +24,7 @@
       <module name="analyzer-core" options="-parameters" />
       <module name="analyzer-job" options="-parameters" />
       <module name="analyzer-scheduler" options="-parameters" />
+      <module name="code-analyzer" options="-parameters" />
     </option>
   </component>
 </project>
