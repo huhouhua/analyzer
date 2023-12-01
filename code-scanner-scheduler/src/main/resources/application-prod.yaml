@@ -9,6 +9,9 @@ git-repository:
 docker:
   host: "unix:///var/run/docker.sock"
   apiVersion: 1.41
+scheduler:
+  maxParallel: 10
+  maxJobWaitTimeSecond: 2 * 60 * 60; # 2小时的最大等待时长，单位为秒
 job:
   tag: 1.0
   repository: 172.17.162.231/devops/scanner-job
@@ -19,6 +22,7 @@ sweep:
       - ".*scanner-job.*"
   container:
     timeCron: "0/10 * * * * ?"
+    timeoutHours: 1
     matches:
       - ".*scanner-job.*"
       - ".*sonar.*"

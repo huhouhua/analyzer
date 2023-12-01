@@ -21,7 +21,6 @@ public class SweepContainerJob implements Job {
     private final DockerClientWrapper dockerClientWrapper;
     private final SweepContainerConfig sweepConfig;
     private final SweepCondition sweepCondition;
-    private static final Integer containerTimeoutHours = 1;
 
     @Autowired
     public SweepContainerJob(SchedulerDockerConfig dockerConfig,
@@ -54,6 +53,6 @@ public class SweepContainerJob implements Job {
         long currentTimestamp = System.currentTimeMillis();
         long timeDifference = currentTimestamp - (createdTimestamp * 1000L);
         long hours = timeDifference / (1000 * 60 * 60);
-        return hours > containerTimeoutHours;
+        return hours > sweepConfig.getTimeoutHours();
     }
 }

@@ -6,20 +6,14 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class Sonar {
-    private  String username;
-    private  String  password;
+    private  String mode;
 
     private  String  dockerFileUrl;
 
     private  String nativeFileUrl;
 
-
-    public void setUsername(@NonNull  String username) {
-        this.username = username;
-    }
-
-    public void setPassword(@NonNull String password) {
-        this.password = password;
+    public void setMode(@NonNull String mode) {
+        this.mode = mode;
     }
 
     public void setDockerFileUrl(@NonNull String dockerFileUrl) {
@@ -30,13 +24,10 @@ public class Sonar {
         this.nativeFileUrl = nativeFileUrl;
     }
 
-    public String getUsername() {
-       return this.username;
+    public String getMode() {
+        return this.mode;
     }
 
-    public String getPassword() {
-        return  this.password;
-    }
 
     public String getDockerFileUrl() {
        return this.dockerFileUrl;
@@ -49,11 +40,9 @@ public class Sonar {
     @Override
     public String toString() {
         return "Sonar{" +
-                "username='" + username + '\'' +
-                ", password='" + password + '\'' +
+                "mode='" + mode + '\'' +
                 ", dockerFileUrl='" + dockerFileUrl + '\'' +
                 ", nativeFileUrl='" + nativeFileUrl + '\'' +
                 '}';
     }
-
 }

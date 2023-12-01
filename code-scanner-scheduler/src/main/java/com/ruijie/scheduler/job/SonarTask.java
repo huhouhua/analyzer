@@ -104,14 +104,14 @@ public class SonarTask implements Callable<Integer> {
         return group.getProjects().get(taskId);
     }
 
-    private Map<String, String> generateVariable(ProjectConfig group, Global global) {
+    private Map<String, String> generateVariable(ProjectConfig projectConfig, Global global) {
         Map<String, String> map = new HashMap<>();
-        ProjectRepository repository = group.getRepo();
+        ProjectRepository repository = projectConfig.getRepo();
         map.put(ProjectSonarConfigContract.PROJECT_NAME, group.getName());
         map.put(ProjectSonarConfigContract.PROJECT_URL, repository.getUrl());
         map.put(ProjectSonarConfigContract.PROJECT_BRANCH_TAG, trySetDefault(repository.getBranch(), global.getRepo().getBranch()));
         map.put(ProjectSonarConfigContract.PROJECT_SONAR_FILE_URL_TAG, trySetDefault(repository.getSonarFileUrl(), global.getSonar().getDockerFileUrl()));
-        map.put(ProjectSonarConfigContract.PROJECT_SONAR_MODE_TAG, trySetDefault(group.getMode(), "dockerfile"));
+        map.put(ProjectSonarConfigContract.PROJECT_SONAR_MODE_TAG, trySetDefault(projectConfig.getMode(), global.getSonar().getMode()));
         map.put(ProjectSonarConfigContract.PROJECT_DESCRIPTION_TAG, group.getDescription());
         this.setVariableForSonar(map);
         return map;
