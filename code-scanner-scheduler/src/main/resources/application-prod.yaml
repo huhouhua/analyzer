@@ -4,14 +4,14 @@ git-repository:
   repository:
     url: "git@172.17.189.70:wangyj/riil-sonar.git"
     branch: "develop"
-    taskFilePath: "/tasks/main.yaml"
+    taskFilePath: "/tasks/develop.yaml"
     privateKeyFilePath: "/etc/git/private_key"
 docker:
   host: "unix:///var/run/docker.sock"
   apiVersion: 1.41
 scheduler:
   maxParallel: 10
-  maxJobWaitTimeSecond: 2 * 60 * 60; # 2小时的最大等待时长，单位为秒
+  maxJobWaitTimeSecond: 2 * 60 * 60 # 2小时的最大等待时长，单位为秒
 job:
   tag: 1.0
   repository: 172.17.162.231/devops/scanner-job
@@ -34,4 +34,4 @@ sonar:
   enable: true
   url: "http://172.17.206.162:30090"
   login: "admin"
-  password: "3ed\$RF5tg"
+  password: "3ed$RF5tg"

@@ -4,18 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ed6d1875-e04e-47b3-a837-77a7aff5445d" name="变更" comment="add notification completion time">
-      <change afterPath="$PROJECT_DIR$/code-scanner-scheduler/src/main/java/com/ruijie/scheduler/config/ExecutorConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code-scanner-scheduler/src/main/java/com/ruijie/scheduler/config/SchedulerConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/code-scanner-scheduler/src/main/java/com/ruijie/scheduler/config/SchedulerConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code-scanner-scheduler/src/main/java/com/ruijie/scheduler/config/SweepContainerConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/code-scanner-scheduler/src/main/java/com/ruijie/scheduler/config/SweepContainerConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code-scanner-scheduler/src/main/java/com/ruijie/scheduler/job/CodeSonarJob.java" beforeDir="false" afterPath="$PROJECT_DIR$/code-scanner-scheduler/src/main/java/com/ruijie/scheduler/job/CodeSonarJob.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code-scanner-scheduler/src/main/java/com/ruijie/scheduler/job/SonarTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/code-scanner-scheduler/src/main/java/com/ruijie/scheduler/job/SonarTask.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code-scanner-scheduler/src/main/java/com/ruijie/scheduler/job/SweepContainerJob.java" beforeDir="false" afterPath="$PROJECT_DIR$/code-scanner-scheduler/src/main/java/com/ruijie/scheduler/job/SweepContainerJob.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code-scanner-scheduler/src/main/java/com/ruijie/scheduler/model/Sonar.java" beforeDir="false" afterPath="$PROJECT_DIR$/code-scanner-scheduler/src/main/java/com/ruijie/scheduler/model/Sonar.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code-scanner-scheduler/src/main/resources/application-dev.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/code-scanner-scheduler/src/main/resources/application-dev.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code-scanner-scheduler/src/main/resources/application-prod.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/code-scanner-scheduler/src/main/resources/application-prod.yaml" afterDir="false" />
-    </list>
+    <list default="true" id="ed6d1875-e04e-47b3-a837-77a7aff5445d" name="变更" comment="update config" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -333,7 +322,7 @@
       <workItem from="1701092546433" duration="917000" />
       <workItem from="1701093493364" duration="224000" />
       <workItem from="1701093742321" duration="75444000" />
-      <workItem from="1701389412054" duration="2652000" />
+      <workItem from="1701389412054" duration="2958000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <created>1701052596204</created>
@@ -377,7 +366,14 @@
       <option name="project" value="LOCAL" />
       <updated>1701389973041</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="update config">
+      <created>1701392535496</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1701392535496</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -400,7 +396,8 @@
     <MESSAGE value="update clone mode and  sonar default  feature" />
     <MESSAGE value="update tryRetry function parameter variable naming! execute to function" />
     <MESSAGE value="add notification completion time" />
-    <option name="LAST_COMMIT_MESSAGE" value="add notification completion time" />
+    <MESSAGE value="update config" />
+    <option name="LAST_COMMIT_MESSAGE" value="update config" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
