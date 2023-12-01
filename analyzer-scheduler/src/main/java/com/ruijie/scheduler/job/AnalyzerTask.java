@@ -7,6 +7,7 @@ import com.github.dockerjava.api.model.Container;
 import com.ruijie.core.ProjectSonarConfigContract;
 import com.ruijie.core.docker.ContainerArgsBuilder;
 import com.ruijie.core.docker.DockerClientWrapper;
+import com.ruijie.scheduler.config.JobConfig;
 import com.ruijie.scheduler.config.SonarConfigProvider;
 import com.ruijie.scheduler.model.Global;
 import com.ruijie.scheduler.model.Group;
@@ -25,19 +26,19 @@ public class AnalyzerTask implements Callable<Integer> {
     private final Integer QUERY_STATE_DELAY_SECOND = 30 * 1000;  //30秒
     private final DockerClientWrapper dockerClientWrapper;
     private final int taskId;
-    private final String image;
+    private final JobConfig jobConfig;
     private final Group group;
     private  final SonarConfigProvider sonarConfigProvider;
 
     private final Global global;
     public AnalyzerTask(int taskId,
-                        String image,
+                        JobConfig jobConfig,
                         SonarConfigProvider sonarConfigProvider,
                         Group group,
                         Global global,
                         DockerClientWrapper dockerClientWrapper) {
         this.taskId = taskId;
-        this.image = image;
+        this.jobConfig = jobConfig;
         this.group = group;
         this.global = global;
         this.dockerClientWrapper = dockerClientWrapper;
@@ -45,12 +46,12 @@ public class AnalyzerTask implements Callable<Integer> {
     }
 
     public static Callable<Integer> newTask(int taskId,
-                                            String image,
+                                            JobConfig jobConfig,
                                             SonarConfigProvider sonarConfigProvider,
                                             Group group,
                                             Global global,
                                             DockerClientWrapper dockerClientWrapper) {
-        return new AnalyzerTask(taskId, image, sonarConfigProvider, group, global, dockerClientWrapper);
+        return new AnalyzerTask(taskId, jobConfig, sonarConfigProvider, group, global, dockerClientWrapper);
     }
 
     @Override
@@ -91,7 +92,7 @@ public class AnalyzerTask implements Callable<Integer> {
     }
 
     private ContainerArgsBuilder containerArgsBuilder(ProjectConfig group) {
-        ContainerArgsBuilder builder = ContainerArgsBuilder.newBuilder(image).
+        ContainerArgsBuilder builder = ContainerArgsBuilder.newBuilder(jobConfig.toImage()).
                 withEnvsMap(generateVariable(group, global)).
                 withContainerName(group.getName());
         if (dockerClientWrapper.getContainerByName(group.getName()) != null) {
@@ -113,6 +114,7 @@ public class AnalyzerTask implements Callable<Integer> {
         map.put(ProjectSonarConfigContract.PROJECT_SONAR_FILE_URL_TAG, trySetDefault(repository.getSonarFileUrl(), global.getSonar().getDockerFileUrl()));
         map.put(ProjectSonarConfigContract.PROJECT_SONAR_MODE_TAG, trySetDefault(projectConfig.getMode(), global.getSonar().getMode()));
         map.put(ProjectSonarConfigContract.PROJECT_DESCRIPTION_TAG, group.getDescription());
+        map.put(ProjectSonarConfigContract.NOTIFY_WEBHOOK_TAG,jobConfig.getNotifyWebhook());
         this.setVariableForSonar(map);
         return map;
     }

@@ -13,4 +13,7 @@ public class ProjectSonarConfigContract {
     public  static  final  String SONAR_LOGIN_TAG ="SONAR_LOGIN";
     public  static  final  String SONAR_PASSWORD_TAG ="SONAR_PASSWORD";
 
+
+    public  static  final  String NOTIFY_WEBHOOK_TAG ="NOTIFY_WEBHOOK";
+
 }

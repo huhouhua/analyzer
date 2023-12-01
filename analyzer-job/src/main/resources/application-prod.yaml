@@ -6,7 +6,7 @@ docker:
   host: "unix:///var/run/docker.sock"
   apiVersion: 1.41
 notification:
-  webhook: "https://open.feishu.cn/open-apis/bot/v2/hook/ed495d44-4048-4bb9-afd8-233235b53437"
+  webhook: ${NOTIFY_WEBHOOK}
 default:
   project:
     name: ${JOB_PROJECT_NAME}

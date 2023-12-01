@@ -75,7 +75,7 @@ public class CodeAnalyzerJob implements Job {
 
         for (int i = 0; i < totalTasks; i++) {
             // 提交任务到完成服务
-            completionService.submit(AnalyzerTask.newTask(i, jobConfig.toImage(), sonarConfigProvider, group, global, dockerClientWrapper));
+            completionService.submit(AnalyzerTask.newTask(i, jobConfig, sonarConfigProvider, group, global, dockerClientWrapper));
             // 每批任务等待完成后继续提交下一批任务
             if ((i + 1) % batchSize == 0) {
                 waitForCompletion(completionService, batchSize);

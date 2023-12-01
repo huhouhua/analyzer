@@ -10,6 +10,16 @@ import org.springframework.stereotype.Component;
 public class JobConfig {
     private  String tag;
     private  String repository;
+
+    private  String notifyWebhook;
+
+    public String getNotifyWebhook() {
+        return notifyWebhook;
+    }
+
+    public void setNotifyWebhook(@NonNull String notifyWebhook) {
+        this.notifyWebhook = notifyWebhook;
+    }
     public String getTag() {
         return tag;
     }
@@ -29,11 +39,13 @@ public class JobConfig {
     public  String  toImage(){
         return StrUtil.format("{}:{}",this.getRepository(),this.getTag());
     }
+
     @Override
     public String toString() {
         return "JobConfig{" +
                 "tag='" + tag + '\'' +
                 ", repository='" + repository + '\'' +
+                ", notifyWebhook='" + notifyWebhook + '\'' +
                 '}';
     }
 }
