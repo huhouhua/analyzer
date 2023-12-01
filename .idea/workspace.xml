@@ -4,52 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ed6d1875-e04e-47b3-a837-77a7aff5445d" name="变更" comment="add private_key to clone project">
-      <change afterPath="$PROJECT_DIR$/code-scanner-core/src/main/java/org/ruijie/core/ProjectSonarConfigContract.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/code-scanner-core/src/main/java/org/ruijie/core/SonarConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/code-scanner-core/src/main/java/org/ruijie/core/docker/DockerSonarArgsBuilder.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/code-scanner-job/src/main/java/com/ruijie/job/config/SonarConfigProvider.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/code-scanner-job/src/main/java/com/ruijie/job/middleware/SonarContext.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/code-scanner-job/src/main/resources/application-dev.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/code-scanner-job/src/main/resources/application-prod.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/code-scanner-scheduler/private_key" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/code-scanner-scheduler/src/main/java/com/ruijie/scheduler/config/JobConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/code-scanner-scheduler/src/main/java/com/ruijie/scheduler/config/MatchExpressionsConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/code-scanner-scheduler/src/main/java/com/ruijie/scheduler/config/SonarConfigProvider.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/code-scanner-scheduler/src/main/java/com/ruijie/scheduler/job/SweepCondition.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/code-scanner-scheduler/src/main/resources/application-dev.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/code-scanner-scheduler/src/main/resources/application-prod.yaml" afterDir="false" />
+    <list default="true" id="ed6d1875-e04e-47b3-a837-77a7aff5445d" name="变更" comment="update tryRetry function parameter variable naming! execute to function">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code-scanner-core/src/main/java/org/ruijie/core/ProjectConfigContract.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code-scanner-core/src/main/java/org/ruijie/core/docker/DockerClientWrapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/code-scanner-core/src/main/java/org/ruijie/core/docker/DockerClientWrapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code-scanner-core/src/main/java/org/ruijie/core/docker/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/code-scanner-core/src/main/java/org/ruijie/core/docker/Helper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code-scanner-core/src/main/java/org/ruijie/core/git/ProjectFeature.java" beforeDir="false" afterPath="$PROJECT_DIR$/code-scanner-core/src/main/java/org/ruijie/core/git/ProjectFeature.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code-scanner-job/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/code-scanner-job/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code-scanner-job/src/main/java/com/ruijie/job/StartApplicationListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/code-scanner-job/src/main/java/com/ruijie/job/StartApplicationListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code-scanner-job/src/main/java/com/ruijie/job/config/GitRepositoryConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/code-scanner-job/src/main/java/com/ruijie/job/config/GitRepositoryConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code-scanner-job/src/main/java/com/ruijie/job/config/ProjectConfigProvider.java" beforeDir="false" afterPath="$PROJECT_DIR$/code-scanner-job/src/main/java/com/ruijie/job/config/ProjectConfigProvider.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code-scanner-job/src/main/java/com/ruijie/job/config/RepositoryConfigProvider.java" beforeDir="false" afterPath="$PROJECT_DIR$/code-scanner-job/src/main/java/com/ruijie/job/config/RepositoryConfigProvider.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code-scanner-job/src/main/java/com/ruijie/job/middleware/CodeScanMiddleware.java" beforeDir="false" afterPath="$PROJECT_DIR$/code-scanner-job/src/main/java/com/ruijie/job/middleware/CodeSonarMiddleware.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code-scanner-job/src/main/java/com/ruijie/job/middleware/CodeScnaProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/code-scanner-job/src/main/java/com/ruijie/job/middleware/CodeSonarProcess.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code-scanner-job/src/main/java/com/ruijie/job/middleware/ConfigParseMiddleware.java" beforeDir="false" afterPath="$PROJECT_DIR$/code-scanner-job/src/main/java/com/ruijie/job/middleware/ConfigParseMiddleware.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code-scanner-job/src/main/java/com/ruijie/job/middleware/InitRepositoryMiddleware.java" beforeDir="false" afterPath="$PROJECT_DIR$/code-scanner-job/src/main/java/com/ruijie/job/middleware/InitRepositoryMiddleware.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code-scanner-job/src/main/java/com/ruijie/job/middleware/ScanContext.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code-scanner-job/src/main/java/com/ruijie/job/notify/Notification.java" beforeDir="false" afterPath="$PROJECT_DIR$/code-scanner-job/src/main/java/com/ruijie/job/notify/Notification.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code-scanner-job/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/code-scanner-job/src/main/resources/application.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code-scanner-scheduler/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/code-scanner-scheduler/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code-scanner-scheduler/src/main/java/com/ruijie/scheduler/config/SchedulerDockerConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/code-scanner-scheduler/src/main/java/com/ruijie/scheduler/config/SchedulerDockerConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code-scanner-job/src/main/java/com/ruijie/job/middleware/CodeSonarProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/code-scanner-job/src/main/java/com/ruijie/job/middleware/CodeSonarProcess.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/code-scanner-scheduler/src/main/java/com/ruijie/scheduler/config/SweepConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/code-scanner-scheduler/src/main/java/com/ruijie/scheduler/config/SweepConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code-scanner-scheduler/src/main/java/com/ruijie/scheduler/job/CodeScanJob.java" beforeDir="false" afterPath="$PROJECT_DIR$/code-scanner-scheduler/src/main/java/com/ruijie/scheduler/job/CodeSonarJob.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code-scanner-scheduler/src/main/java/com/ruijie/scheduler/job/ScanTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/code-scanner-scheduler/src/main/java/com/ruijie/scheduler/job/SonarTask.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code-scanner-scheduler/src/main/java/com/ruijie/scheduler/job/SchedulerManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/code-scanner-scheduler/src/main/java/com/ruijie/scheduler/job/SchedulerManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code-scanner-scheduler/src/main/java/com/ruijie/scheduler/job/SweepContainerJob.java" beforeDir="false" afterPath="$PROJECT_DIR$/code-scanner-scheduler/src/main/java/com/ruijie/scheduler/job/SweepContainerJob.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code-scanner-scheduler/src/main/java/com/ruijie/scheduler/job/SweepImageJob.java" beforeDir="false" afterPath="$PROJECT_DIR$/code-scanner-scheduler/src/main/java/com/ruijie/scheduler/job/SweepImageJob.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code-scanner-scheduler/src/main/java/com/ruijie/scheduler/job/SyncRepositoryJob.java" beforeDir="false" afterPath="$PROJECT_DIR$/code-scanner-scheduler/src/main/java/com/ruijie/scheduler/job/SyncRepositoryJob.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code-scanner-scheduler/src/main/java/com/ruijie/scheduler/model/Group.java" beforeDir="false" afterPath="$PROJECT_DIR$/code-scanner-scheduler/src/main/java/com/ruijie/scheduler/model/Group.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code-scanner-scheduler/src/main/java/com/ruijie/scheduler/model/ProjectConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/code-scanner-scheduler/src/main/java/com/ruijie/scheduler/model/ProjectConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code-scanner-scheduler/src/main/java/com/ruijie/scheduler/model/TaskConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/code-scanner-scheduler/src/main/java/com/ruijie/scheduler/model/TaskConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code-scanner-scheduler/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/code-scanner-scheduler/src/main/resources/application.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/private_key" beforeDir="false" afterPath="$PROJECT_DIR$/code-scanner-job/private_key" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -99,7 +57,7 @@
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "WebServerToolWindowFactoryState": "false",
     "jdk.selected.JAVA_MODULE": "corretto-1.8",
-    "last_opened_file_path": "I:/tool/code-scanner/code-scanner-job",
+    "last_opened_file_path": "I:/tool/code-scanner",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -367,7 +325,8 @@
       <workItem from="1701052255448" duration="842000" />
       <workItem from="1701092546433" duration="917000" />
       <workItem from="1701093493364" duration="224000" />
-      <workItem from="1701093742321" duration="74654000" />
+      <workItem from="1701093742321" duration="75444000" />
+      <workItem from="1701389412054" duration="337000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <created>1701052596204</created>
@@ -390,7 +349,21 @@
       <option name="project" value="LOCAL" />
       <updated>1701200060446</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="update clone mode and  sonar default  feature">
+      <created>1701363483507</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1701363483507</updated>
+    </task>
+    <task id="LOCAL-00005" summary="update tryRetry function parameter variable naming! execute to function">
+      <created>1701363661319</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1701363661319</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -410,7 +383,9 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="init" />
     <MESSAGE value="add private_key to clone project" />
-    <option name="LAST_COMMIT_MESSAGE" value="add private_key to clone project" />
+    <MESSAGE value="update clone mode and  sonar default  feature" />
+    <MESSAGE value="update tryRetry function parameter variable naming! execute to function" />
+    <option name="LAST_COMMIT_MESSAGE" value="update tryRetry function parameter variable naming! execute to function" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

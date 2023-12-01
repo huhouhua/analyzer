@@ -16,8 +16,6 @@ public class SweepConfig {
 
     private  SweepImageConfig image;
 
-
-
     public SweepContainerConfig getContainer() {
         return container;
     }
@@ -40,9 +38,6 @@ public class SweepConfig {
     public void setMatchExpressions(MatchExpressionsConfig matchExpressions) {
         this.matchExpressions = matchExpressions;
     }
-
-
-
     @Override
     public String toString() {
         return "SweepConfig{" +

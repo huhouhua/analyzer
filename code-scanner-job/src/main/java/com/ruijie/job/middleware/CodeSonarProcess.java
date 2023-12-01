@@ -1,6 +1,7 @@
 package com.ruijie.job.middleware;
 
 
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import com.ruijie.job.notify.Notification;
 import com.ruijie.job.notify.NotificationBuilder;
@@ -35,10 +36,11 @@ public class CodeSonarProcess {
 
     private void notification(Exception exception) {
         Notification notification = this.createNotification();
-        String repoInfo = StrUtil.format("*************通知*************\n仓库名称:{}\n仓库地址:{}\n仓库分支:{}\nsonar地址:{}",
+        String repoInfo = StrUtil.format("*************通知*************\n项目名:{}\ngit地址:{}\n分支:{}\n完成时间:{}\nsonar地址:{}",
                 context.getProject().getName(),
                 context.getProject().getUrl(),
                 context.getProject().getBranch(),
+                DateUtil.now(),
                 context.getSonar().getUrl());
         NotificationBuilder builder = NotificationBuilder.newBuilder().
                 withMsgType("text");
