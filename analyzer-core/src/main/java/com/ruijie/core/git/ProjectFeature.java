@@ -6,6 +6,8 @@ import cn.hutool.core.util.StrUtil;
 import lombok.NonNull;
 import org.eclipse.jgit.api.*;
 import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.lib.Ref;
+import org.eclipse.jgit.transport.FetchResult;
 import org.eclipse.jgit.transport.SshSessionFactory;
 import org.eclipse.jgit.transport.SshTransport;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
@@ -27,7 +29,7 @@ public class ProjectFeature implements GitProjectSupport {
         this.configProvider = configProvider;
     }
 
-    public Git gitClone() throws Exception {
+    public Git cloneRepo() throws Exception {
         this.mkStoreDir();
         AtomicReference<Git> git = new AtomicReference<>();
         boolean success = this.tryRetry(() -> {
@@ -49,6 +51,44 @@ public class ProjectFeature implements GitProjectSupport {
         });
         if (!success) {
             throw new Exception("git clone fail");
+        }
+        return git.get();
+    }
+
+    public  Ref checkout(){
+        try {
+         return Git.open(configProvider.getProjectFile()).
+                    checkout().
+                    setName(configProvider.getBranch()).
+                    setProgressMonitor(configProvider.getProgressInstance()).
+                    call();
+        }catch (GitAPIException | IOException e){
+            LOG.error(ExceptionUtil.stacktraceToString(e));
+        }
+        return null;
+    }
+
+    public  FetchResult fetch() throws Exception{
+        this.mkStoreDir();
+        AtomicReference<FetchResult> git = new AtomicReference<>();
+        boolean success = this.tryRetry(() -> {
+            try {
+                FetchCommand command= Git.open(configProvider.getProjectFile()).
+                        fetch().
+                        setRemote("origin").
+                        setProgressMonitor(configProvider.getProgressInstance());
+                setCredentials(command);
+                git.set(command.call());
+                LOG.info("fetch succeed!");
+                return true;
+            } catch (GitAPIException | IOException e) {
+                LOG.error(ExceptionUtil.stacktraceToString(e));
+                git.set(null);
+                return false;
+            }
+        });
+        if (!success) {
+            throw new Exception("fetch fail");
         }
         return git.get();
     }
