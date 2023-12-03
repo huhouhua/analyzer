@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 public class ProjectRepository {
     private  String url;
     private  String  branch;
-    private  String  sonarFileUrl;
+    private  String  sonarFilePath;
 
     public void setUrl(@NonNull String url) {
         this.url = url;
@@ -17,8 +17,8 @@ public class ProjectRepository {
         this.branch = branch;
     }
 
-    public void setSonarFileUrl( String sonarFileUrl) {
-        this.sonarFileUrl = sonarFileUrl;
+    public void setSonarFilePath( String sonarFilePath) {
+        this.sonarFilePath = sonarFilePath;
     }
     public String getUrl() {
         return this.url;
@@ -27,8 +27,8 @@ public class ProjectRepository {
     public String getBranch() {
         return  this.branch;
     }
-    public String getSonarFileUrl() {
-        return this.sonarFileUrl;
+    public String getSonarFilePath() {
+        return this.sonarFilePath;
     }
 
 
@@ -37,7 +37,7 @@ public class ProjectRepository {
         return "ProjectRepository{" +
                 "url='" + url + '\'' +
                 ", branch='" + branch + '\'' +
-                ", sonarFileUrl='" + sonarFileUrl + '\'' +
+                ", sonarFilePath='" + sonarFilePath + '\'' +
                 '}';
     }
 }

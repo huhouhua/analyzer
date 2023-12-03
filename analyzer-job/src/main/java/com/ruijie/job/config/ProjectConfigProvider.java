@@ -9,7 +9,7 @@ public class ProjectConfigProvider {
     private  String name;
     private String url;
     private String branch;
-    private String sonarFileUrl;
+    private String sonarFilePath;
     private String mode;
     private String description;
 
@@ -25,8 +25,8 @@ public class ProjectConfigProvider {
         return this.branch;
     }
 
-    public String getSonarFileUrl() {
-        return this.sonarFileUrl;
+    public String getSonarFilePath() {
+        return this.sonarFilePath;
     }
 
     public String getMode() {
@@ -49,8 +49,8 @@ public class ProjectConfigProvider {
         this.branch = branch;
     }
 
-    public void setSonarFileUrl(String sonarFileUrl) {
-        this.sonarFileUrl = sonarFileUrl;
+    public void setSonarFilePath(String sonarFilePath) {
+        this.sonarFilePath = sonarFilePath;
     }
 
     public void setMode(String mode) {
@@ -66,7 +66,7 @@ public class ProjectConfigProvider {
         return "ProjectConfigProvider{" +
                 "url='" + url + '\'' +
                 ", branch='" + branch + '\'' +
-                ", sonarFileUrl='" + sonarFileUrl + '\'' +
+                ", sonarFilePath='" + sonarFilePath + '\'' +
                 ", mode='" + mode + '\'' +
                 ", description='" + description + '\'' +
                 '}';

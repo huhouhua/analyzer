@@ -8,20 +8,20 @@ import org.springframework.stereotype.Component;
 public class Sonar {
     private  String mode;
 
-    private  String  dockerFileUrl;
+    private  String  dockerFilePath;
 
-    private  String nativeFileUrl;
+    private  String nativeFilePath;
 
     public void setMode(@NonNull String mode) {
         this.mode = mode;
     }
 
-    public void setDockerFileUrl(@NonNull String dockerFileUrl) {
-        this.dockerFileUrl = dockerFileUrl;
+    public void setDockerFilePath(@NonNull String dockerFilePath) {
+        this.dockerFilePath = dockerFilePath;
     }
 
-    public void setNativeFileUrl(@NonNull String nativeFileUrl) {
-        this.nativeFileUrl = nativeFileUrl;
+    public void setNativeFilePath(@NonNull String nativeFilePath) {
+        this.nativeFilePath = nativeFilePath;
     }
 
     public String getMode() {
@@ -29,20 +29,20 @@ public class Sonar {
     }
 
 
-    public String getDockerFileUrl() {
-       return this.dockerFileUrl;
+    public String getDockerFilePath() {
+       return this.dockerFilePath;
     }
 
-    public String getNativeFileUrl() {
-        return this.nativeFileUrl;
+    public String getNativeFilePath() {
+        return this.nativeFilePath;
     }
 
     @Override
     public String toString() {
         return "Sonar{" +
                 "mode='" + mode + '\'' +
-                ", dockerFileUrl='" + dockerFileUrl + '\'' +
-                ", nativeFileUrl='" + nativeFileUrl + '\'' +
+                ", dockerFilePath='" + dockerFilePath + '\'' +
+                ", nativeFilePath='" + nativeFilePath + '\'' +
                 '}';
     }
 }

@@ -7,13 +7,10 @@ import java.util.ArrayList;
 
 @Component
 public class Group {
-
     private ArrayList<ProjectConfig> projects;
     private  String name;
     private  Integer  parallel;
     private  String  description;
-
-
     public void setName(@NonNull String name) {
         this.name = name;
     }

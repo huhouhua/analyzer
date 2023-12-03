@@ -18,7 +18,7 @@ public class ConfigParseMiddleware implements Middleware<AnalyzerContext> {
         }
         Git git = (Git) prev;
         String workDir = git.getRepository().getWorkTree().getPath();
-        String sonarFilePath = StrUtil.format("{}{}{}", workDir,"/",ctx.getProject().getSonarFileUrl());
+        String sonarFilePath = StrUtil.format("{}{}{}", workDir,"/",ctx.getProject().getSonarFilePath());
         LOG.info(StrUtil.format("start parse config {}", sonarFilePath));
         boolean exits = FileUtil.exist(sonarFilePath);
         if (!exits) {

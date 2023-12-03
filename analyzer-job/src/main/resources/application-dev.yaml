@@ -12,7 +12,7 @@ default:
     name: appserver
     url: "git@172.17.189.70:riil-insight/riil-insight-appserver.git"
     branch: "develop"
-    sonarFileUrl: "release\\docker\\SonarDockerfile"
+    sonarFilePath: "release\\docker\\SonarDockerfile"
     mode: "Dockerfile"
     description: "riil-insight-appserver"
   sonar:

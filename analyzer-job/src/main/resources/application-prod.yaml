@@ -12,7 +12,7 @@ default:
     name: ${JOB_PROJECT_NAME}
     url: ${JOB_PROJECT_URL}
     branch: ${JOB_PROJECT_BRANCH}
-    sonarFileUrl: ${JOB_PROJECT_FILE_URL}
+    sonarFilePath: ${JOB_PROJECT_FILE_PATH}
     mode: ${JOB_PROJECT_MODE}
     description: ${JOB_PROJECT_DESCRIPTION}
   sonar:

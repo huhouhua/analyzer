@@ -136,7 +136,7 @@ public class AnalyzerTask implements Callable<AnalyzerTask.TaskInfo> {
         map.put(ProjectSonarConfigContract.PROJECT_NAME, project.getName());
         map.put(ProjectSonarConfigContract.PROJECT_URL, repository.getUrl());
         map.put(ProjectSonarConfigContract.PROJECT_BRANCH_TAG, trySetDefault(repository.getBranch(), global.getRepo().getBranch()));
-        map.put(ProjectSonarConfigContract.PROJECT_SONAR_FILE_URL_TAG, trySetDefault(repository.getSonarFileUrl(), global.getSonar().getDockerFileUrl()));
+        map.put(ProjectSonarConfigContract.PROJECT_SONAR_FILE_PATH_TAG, trySetDefault(repository.getSonarFilePath(), global.getSonar().getDockerFilePath()));
         map.put(ProjectSonarConfigContract.PROJECT_SONAR_MODE_TAG, trySetDefault(project.getMode(), global.getSonar().getMode()));
         map.put(ProjectSonarConfigContract.PROJECT_DESCRIPTION_TAG, project.getDescription());
         map.put(ProjectSonarConfigContract.NOTIFY_WEBHOOK_TAG, jobConfig.getNotifyWebhook());
