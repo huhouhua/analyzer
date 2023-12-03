@@ -7,7 +7,8 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "scheduler")
 public class SchedulerConfig {
     private  Integer maxParallel;
-    private  long maxJobWaitTimeSecond;
+    private  Integer containerRunningCount;
+    private  long jobWaitTimeSecond;
 
     public  void  setMaxParallel(Integer maxParallel){
         this.maxParallel = maxParallel;
@@ -15,18 +16,25 @@ public class SchedulerConfig {
     public  Integer  getMaxParallel(){
         return  this.maxParallel;
     }
-    public  void  setMaxJobWaitTimeSecond(long maxJobWaitTimeSecond){
-        this.maxJobWaitTimeSecond = maxJobWaitTimeSecond;
+    public  void  setJobWaitTimeSecond(long jobWaitTimeSecond){
+        this.jobWaitTimeSecond = jobWaitTimeSecond;
     }
-    public  long  getMaxJobWaitTimeSecond(){
-        return  maxJobWaitTimeSecond;
+    public  long  getJobWaitTimeSecond(){
+        return  jobWaitTimeSecond;
     }
 
+    public   Integer getContainerRunningCount(){
+        return  this.containerRunningCount;
+    }
+    public void  setContainerRunningCount(Integer containerRunningCount){
+        this.containerRunningCount = containerRunningCount;
+    }
     @Override
     public String toString() {
         return "SchedulerConfig{" +
                 "maxParallel=" + maxParallel +
-                ", maxJobWaitTimeSecond=" + maxJobWaitTimeSecond +
+                ", jobWaitTimeSecond=" + jobWaitTimeSecond +
+                ", containerRunningCount=" + containerRunningCount +
                 '}';
     }
 }

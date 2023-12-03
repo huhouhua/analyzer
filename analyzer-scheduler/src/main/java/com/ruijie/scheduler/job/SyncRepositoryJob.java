@@ -39,6 +39,8 @@ public class SyncRepositoryJob implements Job {
     private  static  ObjectId currentObjectId;
     private static String currentBranch;
 
+    private  static String currentBranchRefHead;
+
     @Autowired
     public SyncRepositoryJob(ObjectMapper objectMapper,
                              SchedulerManager container,
@@ -48,6 +50,7 @@ public class SyncRepositoryJob implements Job {
         this.repositoryConfig = provider.getConfig();
         this.gitRepository = repositoryConfig.getRepository();
         currentBranch = gitRepository.getBranch();
+        currentBranchRefHead = String.format("refs/heads/%s", gitRepository.getBranch());
         this.gitProjectSupport = this.createGitSupportInstance();
     }
 
@@ -70,7 +73,7 @@ public class SyncRepositoryJob implements Job {
                         this.pull();
                         this.updateTaskConfig();
                     } else {
-                        LOG.info(String.format("%s skip pull", currentBranch));
+                        LOG.info(String.format("%s pull skip ....", currentBranch));
                     }
                 }
             }
@@ -92,7 +95,7 @@ public class SyncRepositoryJob implements Job {
 
     private ObjectId getRemoteId() throws Exception {
         FetchResult fetchResult = gitProjectSupport.fetch();
-        Ref ref = fetchResult.getAdvertisedRef(String.format("refs/heads/%s", gitRepository.getBranch()));
+        Ref ref = fetchResult.getAdvertisedRef(currentBranchRefHead);
         return ref.getObjectId();
     }
 
@@ -101,7 +104,9 @@ public class SyncRepositoryJob implements Job {
         if (!pullResult.isSuccessful()) {
             LOG.error("pull error!");
         }
-        currentObjectId = pullResult.getMergeResult().getNewHead();
+        currentObjectId = pullResult.getFetchResult().
+                getAdvertisedRef(currentBranchRefHead).
+                getObjectId();
     }
 
     private void cloneRepo() throws Exception {

@@ -31,7 +31,7 @@ public class InitRepositoryMiddleware implements Middleware<AnalyzerContext> {
         GitProjectSupport instance = this.createProjectFeatureInstance(projectPath, ctx.getProject());
         LOG.info("******************* start clone *******************");
         LOG.info(StrUtil.format("clone to {}..............",projectPath));
-        next.execute(instance.gitClone());
+        next.execute(instance.cloneRepo());
         return null;
     }
     private GitProjectSupport createProjectFeatureInstance(String projectPath, ProjectConfigProvider provider ){

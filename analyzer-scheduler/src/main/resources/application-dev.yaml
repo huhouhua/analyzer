@@ -3,15 +3,16 @@ git-repository:
   storeDirectory: "D:/demo/job/"
   repository:
     url: "git@172.17.189.70:wangyj/riil-sonar.git"
-    branch: "develop"
-    taskFilePath: "/tasks/develop.yaml"
+    branch: "dev"
+    taskFilePath: "/tasks/test.yaml"
     privateKeyFilePath: "I:\\tool\\code-analyzer\\analyzer-scheduler\\private_key"
 docker:
   host: tcp://172.17.163.197:2375
   apiVersion: 1.41
 scheduler:
-  maxParallel: 10
-  maxJobWaitTimeSecond: 7200 # 2小时的最大等待时长，单位为秒
+  maxParallel: 10 #job 最大并行数
+  containerRunningCount: 2 #容器运行数
+  jobWaitTimeSecond: 7200 # 运行job 2小时的等待时长，单位为秒
 job:
   tag: 1.0
   repository: 172.17.162.231/devops/analyzer-job

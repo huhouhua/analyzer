@@ -2,6 +2,7 @@ package com.ruijie.scheduler.job;
 
 import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.dockerjava.api.model.Container;
 import com.ruijie.core.docker.DockerClientWrapper;
 import com.ruijie.scheduler.config.JobConfig;
 import com.ruijie.scheduler.config.SchedulerConfig;
@@ -9,6 +10,7 @@ import com.ruijie.scheduler.config.SchedulerDockerConfig;
 import com.ruijie.scheduler.config.SonarConfigProvider;
 import com.ruijie.scheduler.model.Global;
 import com.ruijie.scheduler.model.Group;
+import com.ruijie.scheduler.model.ProjectConfig;
 import com.ruijie.scheduler.model.TaskConfig;
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
@@ -21,6 +23,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.*;
 
 @Component
@@ -52,57 +55,69 @@ public class CodeAnalyzerJob implements Job {
             TaskConfig taskConfig = mapper.readValue(taskStr.getBytes(), TaskConfig.class);
             dockerClientWrapper.printDockerInfo();
             for (Group group : taskConfig.getGroups()) {
-
+                if (group.getProjects() == null || group.getProjects().size() == 0) {
+                    continue;
+                }
                 Integer parallel = (group.getParallel() == null || group.getParallel() == 0)
                         ? taskConfig.getGlobal().getParallel() : group.getParallel();
 
                 if (parallel > schedulerConfig.getMaxParallel()) {
                     parallel = schedulerConfig.getMaxParallel();
                 }
-                this.start(group, taskConfig.getGlobal(), parallel);
+                //容器运行数控制
+                List<Container> containerList = dockerClientWrapper.getRunningOfContainerByList();
+                int residue = Math.abs(containerList.size() - schedulerConfig.getContainerRunningCount());
+                if (residue > 0 && residue < parallel) {
+                    parallel = residue;
+                }
+                TaskUtil.collate(group.getProjects(), parallel, parallel, true).forEach(g -> {
+                    this.start(g, group.getName(), taskConfig.getGlobal());
+                });
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private void start(Group group, Global global, Integer batchSize) {
-        int totalTasks = group.getProjects().size();
+    private void start(List<ProjectConfig> taskList, String groupName, Global global) {
+        int totalTask = taskList.size();
         // 创建线程池
-        ExecutorService executor = Executors.newFixedThreadPool(batchSize);
-        // 创建完成服务
-        CompletionService<Integer> completionService = new ExecutorCompletionService<>(executor);
+        ExecutorService executor = Executors.newFixedThreadPool(totalTask);
+        try {
+            // 创建完成服务
+            CompletionService<AnalyzerTask.TaskInfo> completionService = new ExecutorCompletionService<>(executor);
 
-        for (int i = 0; i < totalTasks; i++) {
-            // 提交任务到完成服务
-            completionService.submit(AnalyzerTask.newTask(i, jobConfig, sonarConfigProvider, group, global, dockerClientWrapper));
-            // 每批任务等待完成后继续提交下一批任务
-            if ((i + 1) % batchSize == 0) {
-                waitForCompletion(completionService, batchSize);
-                LOG.info("All tasks completed. Exiting the loop.");
+            for (int i = 0; i < totalTask; i++) {
+                // 提交任务到完成服务
+                completionService.submit(AnalyzerTask.newTask(i, jobConfig, sonarConfigProvider,
+                        schedulerConfig, taskList.get(i), global, dockerClientWrapper));
             }
+            // 每批任务等待完成后继续提交下一批任务
+            waitForCompletion(completionService, totalTask);
+            LOG.info(String.format("%s  %d The  tasks for the current batch have been completed!", groupName, totalTask));
+        } catch (RejectedExecutionException | NullPointerException e) {
+            LOG.error(e.getMessage());
+        } finally {
+            // 关闭线程池
+            executor.shutdown();
         }
-        // 关闭线程池
-        executor.shutdown();
     }
 
-    private void waitForCompletion(CompletionService<Integer> completionService, int batchSize) {
+    private void waitForCompletion(CompletionService<AnalyzerTask.TaskInfo> completionService, int batchSize) {
         for (int i = 0; i < batchSize; i++) {
             try {
                 // 等待一个任务完成，最大等待时长为 maxWaitTime
-                Future<Integer> result = completionService.poll(schedulerConfig.getMaxJobWaitTimeSecond(), TimeUnit.SECONDS);
+                Future<AnalyzerTask.TaskInfo> result = completionService.poll(schedulerConfig.getJobWaitTimeSecond(), TimeUnit.SECONDS);
                 if (result != null) {
-                    LOG.info("job-id:{} completed!", result.get());
+                    AnalyzerTask.TaskInfo info = result.get();
+                    LOG.info("job-id:{} {} completed!", info.getTaskId(), info.getName());
                 } else {
-                    LOG.warn(StrUtil.format("The wait times out.current max wait time is {} second, the tasks in the current batch are not complete!", schedulerConfig.getMaxJobWaitTimeSecond()));
-                    break;
+                    LOG.warn(StrUtil.format("The wait times out.current max wait time is {} second, the tasks in the current batch are not complete!", schedulerConfig.getJobWaitTimeSecond()));
                 }
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
                 LOG.error(e.getMessage());
-                break;
             }
         }
-        LOG.info("The tasks for the current batch have been completed");
     }
 }
