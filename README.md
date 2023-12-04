@@ -1,4 +1,3 @@
-## Dorisoy.Pan
+## code-analyzer
+code-analyzer 是基于java 8开发的分布式定时代码扫描工具，基于容器调度， 使用docker做为运行环境，您可以在 Windows、Linux 或 Mac上安装docker运行它。
 
-Dorisoy.Pan 是基于.net core8 的跨平台文档管理系统，使用 MS SQL 2012 / MySql8.0（或更高版本）后端数据库，您可以在 Windows、Linux 或 Mac 上运行它,项目中的所有方法都是异步的,支持令牌基身份验证,项目体系结构遵循著名的软件模式和最佳安全实践。源代码是完全可定制的,热插拔且清晰的体系结构,使开发定制功能和遵循任何业务需求变得容易。
-系统使用最新的 Microsoft 技术，高性能稳定性和安全性。
