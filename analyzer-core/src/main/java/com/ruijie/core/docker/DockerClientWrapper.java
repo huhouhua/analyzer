@@ -26,26 +26,26 @@ public class DockerClientWrapper {
     private static final int MAX_CONNECTIONS = 200;
     private static final int CONNECTION_TIMEOUT_HOURS = 5;
     private static final int RESPONSE_TIMEOUT_HOURS = 5;
-    private  static  final  String RUNNING_TAG= "running";
-    private  static  final  String EXITED_TAG= "exited";
-    public  static  final List<String> allStatus = Arrays.asList(RUNNING_TAG,"created","removing","paused",EXITED_TAG,"dead");
-    public  static  final List<String> runningStatus = Collections.singletonList(RUNNING_TAG);
+    private static final String RUNNING_TAG = "running";
+    private static final String EXITED_TAG = "exited";
+    public static final List<String> allStatus = Arrays.asList(RUNNING_TAG, "created", "removing", "paused", EXITED_TAG, "dead");
+    public static final List<String> runningStatus = Collections.singletonList(RUNNING_TAG);
+    public static final List<String> exitedStatus = Collections.singletonList(EXITED_TAG);
+    private static final String DOCKER_SOCK_PATH = "/var/run/docker.sock";
+    private static final String DOCKER_FILE_REPLAC_PATTERNSTRING = "\\$\\{SONAR_ARGS\\}";
+    private final DockerClientConfig dockerClientConfig;
 
-    public  static  final List<String> exitedStatus = Collections.singletonList(EXITED_TAG);
-
-    private  static  final  String  DOCKER_SOCK_PATH="/var/run/docker.sock";
-    private  static  final  String DOCKER_FILE_REPLAC_PATTERNSTRING ="\\$\\{SONAR_ARGS\\}";
-    private final DockerClientConfig config;
-
-     public DockerClientWrapper(@NonNull DockerClientConfig config) {
-        this.config = config;
-        this.dockerClient = this.creatClient(config.getHost());
+    public DockerClientWrapper(@NonNull DockerClientConfig config) {
+        this.dockerClientConfig = config;
+        this.dockerClient = this.creatClient();
     }
-    public static DockerClientWrapper newWrapper(@NonNull DockerClientConfig config){
-            return  new DockerClientWrapper(config);
+
+    public static DockerClientWrapper newWrapper(@NonNull DockerClientConfig config) {
+        return new DockerClientWrapper(config);
     }
+
     public CreateContainerResponse createContainers(@NonNull ContainerArgsBuilder containerBuilder) {
-         LOG.info(containerBuilder.toString());
+        LOG.info(containerBuilder.toString());
         HostConfig hostConfig = new HostConfig().
                 withBinds(new Bind(DOCKER_SOCK_PATH, new Volume(DOCKER_SOCK_PATH)));
         return dockerClient.
@@ -55,6 +55,7 @@ public class DockerClientWrapper {
                 withEnv(Helper.ofVariableFormMap(containerBuilder.getEnvsMap())).
                 exec();
     }
+
     public Container getRunningOfContainerById(String containerId) {
         List<String> idList = new ArrayList<>();
         idList.add(containerId);
@@ -67,24 +68,26 @@ public class DockerClientWrapper {
         }
         return null;
     }
+
     public Container getContainerByName(String name) {
         List<String> nameList = new ArrayList<>();
         nameList.add(name);
         List<Container> containerList = dockerClient.listContainersCmd().
-               withStatusFilter(allStatus).
+                withStatusFilter(allStatus).
                 withNameFilter(nameList).
                 exec();
         Optional<Container> newContainer = containerList.stream().filter(container ->
-                Arrays.asList(container.getNames()).contains(StrUtil.format("/{}",name))).findFirst();
+                Arrays.asList(container.getNames()).contains(StrUtil.format("/{}", name))).findFirst();
         return newContainer.orElse(null);
     }
 
-    public  List<Container> getExitedOfContainerByList(){
-      return dockerClient.listContainersCmd().
+    public List<Container> getExitedOfContainerByList() {
+        return dockerClient.listContainersCmd().
                 withStatusFilter(exitedStatus).
                 exec();
     }
-    public  List<Container> getRunningOfContainerByList(){
+
+    public List<Container> getRunningOfContainerByList() {
         return dockerClient.listContainersCmd().
                 withStatusFilter(runningStatus).
                 exec();
@@ -95,13 +98,15 @@ public class DockerClientWrapper {
                 startContainerCmd(containerId).
                 exec();
     }
-    public void removeContainer(String containerId,boolean isForce) {
+
+    public void removeContainer(String containerId, boolean isForce) {
         dockerClient.
                 removeContainerCmd(containerId).
                 withForce(isForce).
                 exec();
 
     }
+
     public String buildImage(String tag, File baseDirectory, File dockerfile) {
         return dockerClient.buildImageCmd().
                 withBaseDirectory(baseDirectory).
@@ -112,12 +117,13 @@ public class DockerClientWrapper {
                 exec(new SubscribeBuildImage()).
                 awaitImageId();
     }
+
     public List<Image> getImageList() {
-      return  dockerClient.listImagesCmd().
+        return dockerClient.listImagesCmd().
                 exec();
     }
 
-    public void removeImage(String imageName,boolean isForce) {
+    public void removeImage(String imageName, boolean isForce) {
         dockerClient.removeImageCmd(imageName).
                 withForce(isForce).
                 exec();
@@ -129,18 +135,18 @@ public class DockerClientWrapper {
                 normalize().
                 toAbsolutePath().
                 toString();
-         LOG.info(sonarConfig.toString());
-         String sonarArgs =  DockerSonarArgsBuilder.newBuilder(sonarConfig).buildOfAll();
-         LOG.info(sonarArgs);
-        Helper.replacTextContent(dockerfile, DOCKER_FILE_REPLAC_PATTERNSTRING, sonarArgs);
-        return buildImage(tag,new File(workspaceDirectory), dockerfile);
+        LOG.info(sonarConfig.toString());
+        String sonarArgs = DockerSonarArgsBuilder.newBuilder(sonarConfig).buildOfAll();
+        LOG.info(sonarArgs);
+        Helper.replaceTextContent(dockerfile, DOCKER_FILE_REPLAC_PATTERNSTRING, sonarArgs);
+        return buildImage(tag, new File(workspaceDirectory), dockerfile);
     }
 
-    private DockerClient creatClient(String host) {
+    private DockerClient creatClient() {
         // 配置docker CLI的一些选项
         DefaultDockerClientConfig config = DefaultDockerClientConfig
                 .createDefaultConfigBuilder()
-                .withDockerHost(host).
+                .withDockerHost(dockerClientConfig.getHost()).
                 withDockerTlsVerify(false)
                 // 与docker版本对应，参考https://docs.docker.com/engine/api/#api-version-matrix
                 // 或者通过docker version指令查看api version
@@ -158,12 +164,9 @@ public class DockerClientWrapper {
     }
 
     public void printDockerInfo() {
-         LOG.info("printDockerInfo.....");
-         Info info = dockerClient.infoCmd().exec();
-        LOG.info("exec infoCmd end");
+        Info info = dockerClient.infoCmd().exec();
         String infoStr = JSONUtil.toJsonPrettyStr(info);
         LOG.info("docker info ");
         LOG.info(infoStr);
-
     }
 }

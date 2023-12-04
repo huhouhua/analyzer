@@ -11,7 +11,7 @@ import java.util.regex.Matcher;
 
 class Helper {
 
-    public static void replacTextContent(File file, String patternString, String replaceStr) throws IOException {
+    public static void replaceTextContent(File file, String patternString, String replaceStr) throws IOException {
 
         FileReader in = new FileReader(file);
         BufferedReader bufIn = new BufferedReader(in);

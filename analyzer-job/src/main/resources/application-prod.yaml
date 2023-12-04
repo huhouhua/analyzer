@@ -1,12 +1,12 @@
 git:
-  privateKeyFilePath: "/etc/git/private_key"
+  privateKeyFilePath: "/etc/git/private_key" #克隆仓库私钥
 store:
-  directory: "/etc/analyzer/jobs"
+  directory: "/etc/analyzer/jobs" #仓库存储地址
 docker:
-  host: "unix:///var/run/docker.sock"
-  apiVersion: 1.41
+  host: "unix:///var/run/docker.sock"  #docker服务端地址
+  apiVersion: 1.41  #api版本
 notification:
-  webhook: ${NOTIFY_WEBHOOK}
+  webhook: ${NOTIFY_WEBHOOK}  #job运行完的飞书通知接口，就是群里面的机器人地址
 default:
   project:
     name: ${JOB_PROJECT_NAME}
