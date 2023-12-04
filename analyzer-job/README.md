@@ -12,7 +12,7 @@ analyzer-core: 基础类库，主要有docker、git的类库封装，通用的�
 
 analyzer-job: 工作组件，主要负责扫描项目，一个job扫描一个项目，以容器的形式运行，由analyzer-scheduler组件负责调度他。 
 
-analyzer-scheduler: 调度组件，主要负责同步扫描任务仓库、调度job、以及job资源回收、镜像与容器清理工作。 
+analyzer-scheduler: 调度组件，主要负责同步扫描任务仓库、调度与管理job、以及job资源回收、镜像与容器清理工作。 
 
 ## 架构解析
 
