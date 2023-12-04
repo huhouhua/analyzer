@@ -1,6 +1,6 @@
 ## code-analyzer
 code-analyzer 是基于java 8 spring boot开发的分布式定时代码扫描工具，基于容器调度，以GitOps的思想设计， 使用docker做为运行环境，您可以在 Windows、Linux 或 Mac上安装docker运行它。
-## code-analyzer功能清单
+## 功能清单
 1. 支持dockerfile的方式，扫描项目。
 2. 支持扫描在git上托管的项目， 任何第三方git托管平台都支持。
 3. 以git存储扫描任务仓库定义为入口，仓库发生任何的变更，立马会同步最新项目扫描任务。
