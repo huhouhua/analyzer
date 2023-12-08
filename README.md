@@ -17,6 +17,46 @@ analyzer-scheduler: 调度组件，主要负责同步扫描任务仓库、调度
 ## 架构解析
 ![analyzer.png](http://172.17.162.204/huhouhua/code-scanner/-/raw/master/document/%E6%9E%B6%E6%9E%84%E5%9B%BE.png)
 ## 如何使用？
+### 基本使用
+#### 一、环境准备
+1. docker安装
+ 1. 对版本没有要求。
+ 2. 需要
+2. 
+
+#### 二、配置存储扫描任务
+1. 打开git托管存储扫描仓库，如果没有的话，请创建仓库！
+2. 在任意的目录下，创建以yaml格式的文件，填写以下内容
+```yaml
+global:
+  sonar:
+    dockerFilePath: release/docker/SonarDockerfile #dockerfile 扫描文件的默认路径，这个路径是任务仓库里面的路径
+    nativeFilePath: sonar-project.properties  #原生扫描文件的路径，目前未实现此方式。
+    mode: dockerfile  #默认方式
+  parallel: 5 #并行数，每一组group的项目一次扫描多少个项目，如果group没有指定parallel参数的话，那么会默认使用这个并行数。
+  triggerTimeCron: "0 */40 * * * ?" #任务扫描时间，也就是什么时候开始扫描，用的是cron表达式，快速生成的表达式，请仓库[cron在线生成](https://www.pppet.net/)
+  repo:
+    branch: develop  # 扫描的仓库分支，如果projects没有指定branch参数的话，那么会默认使用这个分支。
+groups: #组定义，可以定义多个组，放在最前面的组，最先开始扫描。
+- name: app #组名，可以重复，可以简单的定义为比如xxx业务下所有的前端服务，用英文表示
+  parallel: 4 #并行数，一次扫描，扫描多少个项目。
+  description: "应用组" #组描述
+  projects: # 项目定义
+  - name: appserver #项目名，可以重复
+    mode: dockerfile #项目扫描方式
+    description: "appserver"  #项目描述
+    repo: #仓库定义
+      url: git@172.17.189.70:riil-insight/riil-insight-appserver.git #仓库地址，只支持ssh方式。
+      branch: develop #仓库扫描的分支
+      sonarFilePath: release/docker/SonarDockerfile #dockerfile 扫描的文件路径，这个路径是任务仓库里面的路径。
+  - name: ruizhi-cbb #定义第二个项目，其他的配置默认使用全局定义的。
+    description: "ruizhi-cbb"
+    repo:
+      url: git@172.17.189.70:ruizhi-cbb/ruizhi-cbb.git
+```
+#### 三、运行
+
+### 高级用法
 
 ## 如何开发？
 
