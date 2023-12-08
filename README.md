@@ -15,7 +15,7 @@ analyzer-job: 工作组件，主要负责扫描项目，一个job扫描一个项
 analyzer-scheduler: 调度组件，主要负责同步扫描任务仓库、调度job、以及job资源回收、镜像与容器清理工作。 
 
 ## 架构解析
-
+![analyzer.png](http://172.17.162.204/huhouhua/code-scanner/-/blob/master/document/%E6%9E%B6%E6%9E%84%E5%9B%BE.png)
 ## 如何使用？
 
 ## 如何开发？
