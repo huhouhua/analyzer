@@ -218,7 +218,7 @@ sonar: #sonar服务端地址
 - java jdk1.8
 - IDEA 
 - docker
-### analyzer-job
 
-### analyzer-scheduler
-
+### 组件开发文档
+-  [`scheduler`](http://172.17.162.204/huhouhua/code-scanner/-/blob/master/analyzer-scheduler/README.md)
+-  [`job`](http://172.17.162.204/huhouhua/code-scanner/-/blob/master/analyzer-job/README.md)
