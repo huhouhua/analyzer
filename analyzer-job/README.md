@@ -9,25 +9,45 @@
  5. 飞书通知
 
 ## 如何开发
+### 1. 使用IDEA工具，打开此项目。
+### 2. 修改环境，打开resources目录下的application.yaml文件，将active设置为dev，那么会以application-dev.yaml为配置文件。
+``` yaml
+spring:
+  profiles:
+    active: dev #指定当前环境，目前为dev、prod环境
+```
+### 3. application-dev.yaml文件，需要修改的参数
+``` yaml
+git:
+  privateKeyFilePath: "I:\\tool\\code-analyzer\\private_key" #这个是克隆仓库用的私钥，如果git地址调整的话，那么需要修改此文件内容，默认是http://172.17.189.70/私钥， 路径修改为当前analyzer-analyzer模块下的private_key文件的绝对路径。
+store:
+  directory: "I:\\test\\project\\appserver2\\"  #这个是克隆仓库后，存放的目录地址！需要修改。
+docker:
+  host: tcp://172.17.163.197:2375  #这个是docker服务端的API地址，需要修改。
+  apiVersion: 1.41
+notification:
+  webhook: "https://open.feishu.cn/open-apis/bot/v2/hook/ed495d44-4048-4bb9-afd8-233235b53437"  #扫描结果通知地址，这是飞书群里面机器人的地址，需要修改。
+default:
+  project: 
+    name: appserver  #扫描的项目名称，需要修改
+    url: "git@172.17.189.70:riil-insight/riil-insight-appserver.git" #扫描的仓库git地址，需要修改
+    branch: "develop"  #分支
+    sonarFilePath: "release\\docker\\SonarDockerfile"  #SonarDockerfile文件目录，需要修改
+    mode: "Dockerfile"  
+    description: "riil-insight-appserver" #项目描述,需要修改
+  sonar:
+    enable: true  #是否开启sonar为固定，如果true的话，那么构建SonarDockerfile会把结果上传到此服务端上。
+    url: "http://172.17.206.162:30090"
+    login: admin
+    password: "3ed$RF5tg"
+```
 
-## code-analyzer功能清单
-1. 支持dockerfile的方式，扫描项目。
-2. 支持扫描在git上托管的项目， 任何第三方git托管平台都支持。
-3. 以git存储扫描任务仓库定义为入口，仓库发生任何的变更，立马会同步最新项目扫描任务。
-4. 支持横向扩展的功能，如果扫描不够快的话，或者需要支持多项目与多分支的场景，那么以启动多个scheduler容器来调度。
-5. 支持cron表达式定义扫描时间。
-6. 支持飞书通知，项目扫描完，会把扫描结果以接口的形式通知到飞书群。
-### 项目结构介绍
-analyzer-core: 基础类库，主要有docker、git的类库封装，通用的配置定义等，提供给analyzer-scheduler、analyzer-job组件使用。
-
-analyzer-job: 工作组件，主要负责扫描项目，一个job扫描一个项目，以容器的形式运行，由analyzer-scheduler组件负责调度他。 
-
-analyzer-scheduler: 调度组件，主要负责同步扫描任务仓库、调度与管理job、以及job资源回收、镜像与容器清理工作。 
-
-## 架构解析
-
-## 如何使用？
-
-## 如何开发？
-
+### 如何部署
+``` shell
+  cd analyzer-job
+  docker build -t 172.17.162.231/devops/analyzer-job:版本号 .
+  docker push 172.17.162.231/devops/analyzer-job:版本号
+```
+### 如何快速测试
+docker run -ti  --name appserver -e JOB_PROJECT_NAME=test -e JOB_PROJECT_URL=git@172.17.189.70:riil-insight/riil-insight-appserver.git  -e JOB_PROJECT_BRANCH=develop  -e JOB_PROJECT_FILE_URL=release/docker/SonarDockerfile -e JOB_PROJECT_MODE=dockerfile -e JOB_PROJECT_DESCRIPTION=test    -e SONAR_ENABLE=true  -e SONAR_URL=http://172.17.206.162:30090   -e SONAR_LOGIN=admin -e SONAR_PASSWORD=3ed$RF5tg  172.17.162.231/devops/scanner-job:1.0
 
