@@ -79,11 +79,11 @@ SonarDockerfile这个文件主要做的事情就是扫描，analyzer基于这个
 
 ##### 注意点
 1. 项目检查下是有**sonar-project.properties**文件，如果没有的话，那么需要创建此文件，定义下sonar相关配置信息。
-2. SonarDockerfile文件内容,**${SONAR_ARGS}**这个变量必须要有，需要传递参数用，否则构建不了。
+2. SonarDockerfile文件内容, **${SONAR_ARGS}** 这个变量必须要有，需要传递参数用，否则构建不了。
 
 #####  **后端**，这里以appserver为例，mvn sonar此命令就是用来扫描，这里指的是java，不同的编程语言，RUN指令 执行的命令不一样而以。
 ``` dockerfile
- FROM 172.17.162.231/insight/appserver:base-11 AS builder-java
+FROM 172.17.162.231/insight/appserver:base-11 AS builder-java
 ENV WORKDIR=/java-build/
 
 FROM 172.17.162.231/library/alpine-sonar:base
@@ -254,6 +254,6 @@ sonar: #sonar服务端地址
 - IDEA 
 - docker
 
-### 组件开发文档
+### 开发文档
 -  [`scheduler`](http://172.17.162.204/huhouhua/code-scanner/-/blob/master/analyzer-scheduler/README.md)
 -  [`job`](http://172.17.162.204/huhouhua/code-scanner/-/blob/master/analyzer-job/README.md)
