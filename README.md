@@ -215,10 +215,10 @@ sonar: #sonar服务端地址
 ```
 ## 如何开发？
 ### 环境要求
-  java jdk1.8
-  IDEA 
-  docker
-### 
+- java jdk1.8
+- IDEA 
+- docker
+### analyzer-job
 
-
+### analyzer-scheduler
 
