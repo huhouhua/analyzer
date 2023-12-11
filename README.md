@@ -19,7 +19,7 @@ analyzer-scheduler: 调度组件，主要负责同步扫描任务仓库、调度
 ## 如何使用？
 ### 基本使用
 #### 一、环境准备
-## 1. docker安装
+##### 1. docker安装
  1. 下载安装包
  ``` shell
  curl -O  http://172.17.163.74:7050/recover-tools/docker.tar.gz
@@ -38,14 +38,14 @@ analyzer-scheduler: 调度组件，主要负责同步扫描任务仓库、调度
    ``` shell
    rpm -ivh /opt/docker/* --nodeps
   ``` 
-## 2. 设置daemon.json
+##### 2. 设置daemon.json
   ``` shell
    vi /etc/docker/daemon.json
   ```
    ``` json
    {
   "registry-mirrors": [
-     "https://docker.mirrors.ustc.edu.cn/","https://hub-mirror.c.163.com","https://registry.cn-shanghai.aliyuncs.com","https://registry.docker-cn.com","https://b9pmyelo.mirror.aliyuncs.com"
+     "https://docker.mirrors.ustc.edu.cn/","https://hub-mirror.c.163.com","https://registry.docker-cn.com","https://b9pmyelo.mirror.aliyuncs.com"
   ],
   "log-driver": "json-file",
   "log-level": "warn",
@@ -59,14 +59,14 @@ analyzer-scheduler: 调度组件，主要负责同步扫描任务仓库、调度
   "bip":"169.254.0.1/24"
 }
    ```
-## 3. 开放docker服务端口
+##### 3. 开放docker服务端口
    设置tcp://0.0.0.0:2375、unix:///var/run/docker.sock
   ``` shell
    vi /usr/lib/systemd/system/docker.service
   ```
  ![docker.png](http://172.17.162.204/huhouhua/code-scanner/-/raw/master/document/docker_20231211092949.png)
   
-## 4. 重启服务
+##### 4. 重启服务
   ``` shell
     systemctl enable docker
     systemctl daemon-reload
@@ -162,7 +162,57 @@ sonar: #sonar服务端地址
   docker run -d --name analyzer-scheduler -v /root/analyzer/application-prod.yaml:/app/application-prod.yaml -v /var/run/docker.sock:/var/run/docker.sock 172.17.162.231/devops/analyzer-scheduler:1.0
 ```
 ### 高级用法
-
+#### 1. 扫描多存储扫描任务文件
+ 1. 比如需要扫描所有项目的test分支，那么创建application-prod-test.yaml文件
+ ``` shell
+  vi analyzer/application-prod-test.yaml
+ ```
+ 2. 粘贴以下内容，但是把仓库分支，branch修改为test，然后taskFilePath对应的任务配置文件也修改下。
+ ``` yaml
+ git-repository:
+  syncTimeCron: "0/30 * * * * ?" #同步任务仓库的时间，建议三十秒同步一次。
+  storeDirectory: "/etc/analyzer/scheduler/" #仓库克隆到哪个目录里面，这个是容器上的地址
+  repository:
+    url: "git@172.17.189.70:wangyj/riil-sonar.git" #git仓库地址
+    branch: "test" #仓库分支
+    taskFilePath: "/tasks/test.yaml" #扫描的文件路径
+    privateKeyFilePath: "/etc/git/private_key" #克隆仓库的私钥
+docker:
+  host: "unix:///var/run/docker.sock" #docker服务端地址
+  apiVersion: 1.41 #api版本
+scheduler: #调度器配置
+  maxParallel: 10 #job每一次最大的并行数，也就是说扫描文件定义的Parallel的参数，不能大于他，如果大于他，那么就默认使用maxParallel。
+  containerRunningCount: 30 #容器最大运行数
+  jobWaitTimeSecond: 7200 # 运行job的等待时长，2小时的等待时长，单位为秒
+job: #job配置
+  tag: 1.0 #镜像版本
+  repository: 172.17.162.231/devops/analyzer-job #镜像地址
+  notifyWebhook: "https://open.feishu.cn/open-apis/bot/v2/hook/ed495d44-4048-4bb9-afd8-233235b53437" #job运行完的飞书通知接口，就是群里面的机器人地址
+sweep: #清理扫描任务的job
+  matchExpressions: #清理条件表达式
+    operator: NotIn
+    values:
+      - ".*analyzer-job.*"
+  container: #清理容器
+    timeCron: "0/10 * * * * ?"
+    timeoutHours: 1
+    matches:
+      - ".*analyzer-job.*"
+      - ".*sonar.*"
+  image: #清理镜像
+    timeCron: "0/10 * * * * ?"
+    matches:
+      - ".*<none>.*"
+sonar: #sonar服务端地址
+  enable: true #是否开启，如果true的话，那么会把扫描报告上传到这个sonar服务器上去，如果为false，那么把报告上传到项目内置的sonar服务端地址。
+  url: "http://172.17.206.162:30090" #地址
+  login: "admin" #账号
+  password: "3ed$RF5tg" #密码
+ ```
+2. 运行一个新的容器
+``` shell
+  docker run -d --name analyzer-scheduler-test -v /root/analyzer/application-prod-test.yaml:/app/application-prod.yaml -v /var/run/docker.sock:/var/run/docker.sock 172.17.162.231/devops/analyzer-scheduler:1.0
+```
 ## 如何开发？
 
 
