@@ -209,10 +209,16 @@ sonar: #sonar服务端地址
   login: "admin" #账号
   password: "3ed$RF5tg" #密码
  ```
-2. 运行一个新的容器
+2. 运行一个新的容器,名字为analyzer-scheduler-test
 ``` shell
   docker run -d --name analyzer-scheduler-test -v /root/analyzer/application-prod-test.yaml:/app/application-prod.yaml -v /var/run/docker.sock:/var/run/docker.sock 172.17.162.231/devops/analyzer-scheduler:1.0
 ```
 ## 如何开发？
+### 环境要求
+  java jdk1.8
+  IDEA 
+  docker
+### 
+
 
 
