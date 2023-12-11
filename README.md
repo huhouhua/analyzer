@@ -19,11 +19,59 @@ analyzer-scheduler: 调度组件，主要负责同步扫描任务仓库、调度
 ## 如何使用？
 ### 基本使用
 #### 一、环境准备
-1. docker安装
- 1. 对版本没有要求。
- 2. 需要
-2. 
-
+## 1. docker安装
+ 1. 下载安装包
+ ``` shell
+ curl -O  http://172.17.163.74:7050/recover-tools/docker.tar.gz
+ tar -zxvf docker.tar.gz -C /opt
+ ```
+ 2. 关闭selinux
+ ``` shell
+ sed  -i "s/SELINUX=enforcing/SELINUX=disabled/g"  /etc/selinux/config
+ setenforce 0 
+ ```
+ 3. 关闭防火墙
+  ``` shell
+  systemctl disable firewalld --now
+  ```
+ 4. 安装docker
+   ``` shell
+   rpm -ivh /opt/docker/* --nodeps
+  ``` 
+## 2. 设置daemon.json
+  ``` shell
+   vi /etc/docker/daemon.json
+  ```
+   ``` json
+   {
+  "registry-mirrors": [
+     "https://docker.mirrors.ustc.edu.cn/","https://hub-mirror.c.163.com","https://registry.cn-shanghai.aliyuncs.com","https://registry.docker-cn.com","https://b9pmyelo.mirror.aliyuncs.com"
+  ],
+  "log-driver": "json-file",
+  "log-level": "warn",
+  "log-opts": {
+    "max-size": "10m",
+    "max-file": "3"
+    },
+  "insecure-registries":
+        ["127.0.0.1","172.17.162.231", "172.17.162.205", "172.17.162.207", "172.17.189.43", "0.0.0.0/0","::0","172.17.163.58"],
+  "data-root":"/var/lib/docker",
+  "bip":"169.254.0.1/24"
+}
+   ```
+## 3. 开放docker服务端口
+   设置tcp://0.0.0.0:2375、unix:///var/run/docker.sock
+  ``` shell
+   vi /usr/lib/systemd/system/docker.service
+  ```
+ ![docker.png](http://172.17.162.204/huhouhua/code-scanner/-/raw/master/document/docker_20231211092949.png)
+  
+## 4. 重启服务
+  ``` shell
+    systemctl enable docker
+    systemctl daemon-reload
+    systemctl start docker
+  ```
 #### 二、配置存储扫描任务
 1. 打开git托管存储扫描仓库，如果没有的话，请创建仓库！
 2. 在任意的目录下，创建以yaml格式的文件，填写以下内容
