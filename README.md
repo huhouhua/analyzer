@@ -72,7 +72,39 @@ analyzer-scheduler: 调度组件，主要负责同步扫描任务仓库、调度
     systemctl daemon-reload
     systemctl start docker
   ```
-#### 二、配置存储扫描任务
+#### 二、SonarDockerfile文件定义
+SonarDockerfile这个文件主要做的事情就是扫描，analyzer基于这个文件而构建，所以这个文件必须得提前定义好。
+
+##### 注意点
+1. 项目检查下是有**sonar-project.properties**文件，如果没有的话，那么需要创建此文件，定义下sonar相关配置信息。
+2. SonarDockerfile文件内容,**${SONAR_ARGS}**这个变量必须要有，需要传递参数用，否则构建不了。
+
+#####  **后端**，这里以appserver为例，mvn sonar此命令就是用来扫描，这里指的是java，不同的编程语言，RUN指令 执行的命令不一样而以。
+``` dockerfile
+ FROM 172.17.162.231/insight/appserver:base-11 AS builder-java
+ENV WORKDIR=/java-build/
+
+FROM 172.17.162.231/library/alpine-sonar:base
+ARG SONAR_ARGS
+ENV WORKDIR=/code-analyze
+COPY . ${WORKDIR}
+COPY --from=builder-java /root/.m2/repository /root/.m2/repository/
+WORKDIR ${WORKDIR}
+USER root
+RUN mvn sonar:sonar --settings settings.xml -Dsonar.projectKey=appserver-sonar -Dmaven.test.skip=true -Dsonar.scm.disabled=true ${SONAR_ARGS}
+
+```
+##### **前端**，这里以riil-insight-frontend为例，sonar-scanner 就是扫描命令。
+``` dockerfile
+FROM 172.17.162.231/library/alpine-sonar:base
+ARG SONAR_ARGS
+ENV WORKDIR=/code-analyze
+COPY . ${WORKDIR}
+WORKDIR ${WORKDIR}
+USER root
+RUN sonar-scanner ${SONAR_ARGS}
+```
+#### 三、配置存储扫描任务
 1. 打开git托管存储扫描仓库，如果没有的话，请创建仓库！
 2. 在任意的目录下，创建以yaml格式的文件，填写以下内容
 ```yaml
@@ -102,7 +134,8 @@ groups: #组定义，可以定义多个组，放在最前面的组，最先开�
     repo:
       url: git@172.17.189.70:ruizhi-cbb/ruizhi-cbb.git
 ```
-#### 三、运行
+
+#### 四、运行
 ### 1.调度配置 
 1. 配置调度仓库、和分支，把存储扫描仓库的git地址、分支，指定下，具体为repository、branch这二个字段。
 2. 修改notifyWebhook扫描通知地址，修改成自己的，这个是飞书群机器人的地址。
