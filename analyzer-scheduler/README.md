@@ -59,6 +59,6 @@ sonar:
 ### 如何部署
 ``` shell
   cd code-analyzer
-  docker build -t 172.17.162.231/devops/analyzer-scheduler:版本号 -f  SchedulerDockerfile .
+  docker build --pull --no-cache -t 172.17.162.231/devops/analyzer-scheduler:版本号 -f  SchedulerDockerfile .
   docker push 172.17.162.231/devops/analyzer-scheduler:版本号
 ```
