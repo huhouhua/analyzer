@@ -60,7 +60,7 @@ analyzer-scheduler: 调度组件，主要负责同步扫描任务仓库、调度
 }
    ```
 ##### 3. 开放docker服务端口
-   设置tcp://0.0.0.0:2375、unix:///var/run/docker.sock
+   添加tcp://0.0.0.0:2375、unix:///var/run/docker.sock
   ``` shell
    vi /usr/lib/systemd/system/docker.service
   ```
