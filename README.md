@@ -20,6 +20,8 @@ analyzer-scheduler: 调度组件，主要负责同步扫描任务仓库、调度
 ### 基本使用
 #### 一、环境准备
 ##### 1. docker安装
+ **注意点：**
+   对版本没有要求。
  1. 下载安装包
  ``` shell
  curl -O  http://172.17.163.74:7050/recover-tools/docker.tar.gz
