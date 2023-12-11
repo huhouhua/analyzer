@@ -45,7 +45,7 @@ default:
 ### 如何部署
 ``` shell
   cd analyzer-job
-  docker build -t 172.17.162.231/devops/analyzer-job:版本号 .
+  docker build -t 172.17.162.231/devops/analyzer-job:版本号 -f  JobDockerfile .
   docker push 172.17.162.231/devops/analyzer-job:版本号
 ```
 ### 如何快速测试

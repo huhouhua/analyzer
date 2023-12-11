@@ -1,0 +1,22 @@
+FROM  172.17.162.231/devops/maven:3.6.1-jdk-8-alpine AS build
+
+WORKDIR /build
+
+COPY . .
+
+RUN export https_proxy=http://172.17.189.80:4128
+
+RUN mvn clean package -U -s ./settings.xml -Dmaven.test.skip=true
+
+FROM 172.17.162.231/library/alpine-java:1.8.0_221-b11 as final
+
+WORKDIR /app
+
+COPY --from=build /build/analyzer-scheduler/target/analyzer-scheduler.jar .
+COPY --from=build /build/analyzer-scheduler/target/classes/application-prod.yaml .
+COPY private_key /etc/git/private_key
+
+ENV TZ=Asia/Shanghai
+ENV SPRING_PROFILES_ACTIVE=prod
+
+ENTRYPOINT ["java", "-jar", "analyzer-scheduler.jar","--spring.config.location=./application-prod.yaml"]
