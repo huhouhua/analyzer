@@ -46,20 +46,8 @@ analyzer-scheduler: 调度组件，主要负责同步扫描任务仓库、调度
   ```
    ``` json
    {
-  "registry-mirrors": [
-     "https://docker.mirrors.ustc.edu.cn/","https://hub-mirror.c.163.com","https://registry.docker-cn.com","https://b9pmyelo.mirror.aliyuncs.com"
-  ],
-  "log-driver": "json-file",
-  "log-level": "warn",
-  "log-opts": {
-    "max-size": "10m",
-    "max-file": "3"
-    },
-  "insecure-registries":
-        ["127.0.0.1","172.17.162.231", "172.17.162.205", "172.17.162.207", "172.17.189.43", "0.0.0.0/0","::0","172.17.163.58"],
-  "data-root":"/var/lib/docker",
-  "bip":"169.254.0.1/24"
-}
+   "insecure-registries":["0.0.0.0/0","::0"] #增加"0.0.0.0/0"、"::0"
+   }
    ```
 ##### 3. 开放docker服务端口
    添加tcp://0.0.0.0:2375、unix:///var/run/docker.sock
