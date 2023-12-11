@@ -103,7 +103,64 @@ groups: #组定义，可以定义多个组，放在最前面的组，最先开�
       url: git@172.17.189.70:ruizhi-cbb/ruizhi-cbb.git
 ```
 #### 三、运行
-
+### 1.调度配置 
+1. 配置调度仓库、和分支，把存储扫描仓库的git地址、分支，指定下，具体为repository、branch这二个字段。
+2. 修改notifyWebhook扫描通知地址，修改成自己的，这个是飞书群机器人的地址。
+3. sonar配置url、login、password字段，根据实际情况，指定下。
+ ``` shell
+   mkdir analyzer && cd analyzer
+   vi application-prod.yaml
+ ```
+ ``` yaml
+ git-repository:
+  syncTimeCron: "0/30 * * * * ?" #同步任务仓库的时间，建议三十秒同步一次。
+  storeDirectory: "/etc/analyzer/scheduler/" #仓库克隆到哪个目录里面，这个是容器上的地址
+  repository:
+    url: "git@172.17.189.70:wangyj/riil-sonar.git" #git仓库地址
+    branch: "develop" #仓库分支
+    taskFilePath: "/tasks/develop.yaml" #扫描的文件路径
+    privateKeyFilePath: "/etc/git/private_key" #克隆仓库的私钥
+docker:
+  host: "unix:///var/run/docker.sock" #docker服务端地址
+  apiVersion: 1.41 #api版本
+scheduler: #调度器配置
+  maxParallel: 10 #job每一次最大的并行数，也就是说扫描文件定义的Parallel的参数，不能大于他，如果大于他，那么就默认使用maxParallel。
+  containerRunningCount: 30 #容器最大运行数
+  jobWaitTimeSecond: 7200 # 运行job的等待时长，2小时的等待时长，单位为秒
+job: #job配置
+  tag: 1.0 #镜像版本
+  repository: 172.17.162.231/devops/analyzer-job #镜像地址
+  notifyWebhook: "https://open.feishu.cn/open-apis/bot/v2/hook/ed495d44-4048-4bb9-afd8-233235b53437" #job运行完的飞书通知接口，就是群里面的机器人地址
+sweep: #清理扫描任务的job
+  matchExpressions: #清理条件表达式
+    operator: NotIn
+    values:
+      - ".*analyzer-job.*"
+  container: #清理容器
+    timeCron: "0/10 * * * * ?"
+    timeoutHours: 1
+    matches:
+      - ".*analyzer-job.*"
+      - ".*sonar.*"
+  image: #清理镜像
+    timeCron: "0/10 * * * * ?"
+    matches:
+      - ".*<none>.*"
+sonar: #sonar服务端地址
+  enable: true #是否开启，如果true的话，那么会把扫描报告上传到这个sonar服务器上去，如果为false，那么把报告上传到项目内置的sonar服务端地址。
+  url: "http://172.17.206.162:30090" #地址
+  login: "admin" #账号
+  password: "3ed$RF5tg" #密码
+ ```
+### 2. 镜像拉取
+``` shell
+ docker pull 172.17.162.231/devops/analyzer-scheduler:1.0
+ docker pull 172.17.162.231/devops/analyzer-job:1.0
+```
+### 3. 运行
+``` shell
+  docker run -d --name analyzer-scheduler -v /root/analyzer/application-prod.yaml:/app/application-prod.yaml -v /var/run/docker.sock:/var/run/docker.sock 172.17.162.231/devops/analyzer-scheduler:1.0
+```
 ### 高级用法
 
 ## 如何开发？
