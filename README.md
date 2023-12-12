@@ -63,6 +63,17 @@ analyzer-scheduler: 调度组件，主要负责同步扫描任务仓库、调度
     systemctl start docker
   ```
 ##### 5. sonarQube安装
+注意:当前提供的是k8s方式安装，所以需要准备好k8s、以及helm命令行，其他的方式也是可以的。
+  1. 下载安装包
+   ``` shell
+ curl -O  http://172.17.163.74:7050/sonarqube.tar.gz
+ tar -zxvf sonarqube.tar.gz -C /opt
+ ```
+  2. 执行安装脚本
+   ``` shell
+  cd /opt/sonarqube/
+  sh deploy.sh 1.0.0 sonarqube
+ ```
 #### 二、SonarDockerfile文件定义
 SonarDockerfile这个文件主要做的事情就是扫描，analyzer基于这个文件而构建，所以这个文件必须得提前定义好。
 
