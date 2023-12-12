@@ -127,7 +127,7 @@ groups: #组定义，可以定义多个组，放在最前面的组，最先开�
 
 #### 四、运行
 ### 1.调度配置 
-1. 配置调度仓库、和分支，把存储扫描仓库的git地址、分支，指定下，具体为repository、branch这二个字段。
+1. 配置调度仓库、和分支，把存储扫描仓库的git地址、任务文件、分支，指定下，具体为repository、branch、taskFilePath这几个字段。
 2. 修改notifyWebhook扫描通知地址，修改成自己的，这个是飞书群机器人的地址。
 3. sonar配置url、login、password字段，根据实际情况，指定下。
  ``` shell
