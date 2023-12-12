@@ -74,6 +74,10 @@ analyzer-scheduler: 调度组件，主要负责同步扫描任务仓库、调度
   cd /opt/sonarqube/
   sh deploy.sh 1.0.0 sonarqube
  ```
+ 3. 查看端口号，默认端口号为30090
+ ``` shell
+ kubectl get svc sonarqube-sonarqube  -n sonarqube
+ ```
 #### 二、SonarDockerfile文件定义
 SonarDockerfile这个文件主要做的事情就是扫描，analyzer基于这个文件而构建，所以这个文件必须得提前定义好。
 
