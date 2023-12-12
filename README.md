@@ -186,7 +186,7 @@ sonar: #sonar服务端地址
 ```
 ### 高级用法
 #### 1. 扫描多存储扫描任务文件
- 1. 比如根据任务文件、来区分、和统一项目分支，也就是需要扫描所有项目的test分支，那么创建application-prod-test.yaml文件
+ 1. 比如根据任务文件，来区分和统一项目分支，也就是需要扫描所有项目的test分支，那么创建application-prod-test.yaml文件
  ``` shell
   vi analyzer/application-prod-test.yaml
  ```
