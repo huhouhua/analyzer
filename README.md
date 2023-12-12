@@ -15,7 +15,7 @@ analyzer-job: 工作组件，主要负责扫描项目，一个job扫描一个项
 analyzer-scheduler: 调度组件，主要负责同步扫描任务仓库、调度job、以及job资源回收、镜像与容器清理工作。 
 
 ## 架构解析
-![analyzer.png](http://172.17.162.204/huhouhua/code-scanner/-/raw/master/document/%E6%9E%B6%E6%9E%84%E5%9B%BE.png)
+![analyzer.png](http://172.17.189.70/sonar/code-analyzer/-/blob/master/document/%E6%9E%B6%E6%9E%84%E5%9B%BE.png)
 ## 如何使用？
 ### 基本使用
 #### 一、环境准备
@@ -54,7 +54,7 @@ analyzer-scheduler: 调度组件，主要负责同步扫描任务仓库、调度
   ``` shell
    vi /usr/lib/systemd/system/docker.service
   ```
- ![docker.png](http://172.17.162.204/huhouhua/code-scanner/-/raw/master/document/docker_20231211092949.png)
+ ![docker.png](http://172.17.189.70/sonar/code-analyzer/-/blob/master/document/docker_20231211092949.png)
   
 ##### 4. 重启服务
   ``` shell
@@ -261,5 +261,5 @@ sonar: #sonar服务端地址
 - sonarQube
 
 ### 开发文档
--  [`scheduler`](http://172.17.162.204/huhouhua/code-scanner/-/blob/master/analyzer-scheduler/README.md)
--  [`job`](http://172.17.162.204/huhouhua/code-scanner/-/blob/master/analyzer-job/README.md)
+-  [`scheduler`](http://172.17.189.70/sonar/code-analyzer/-/blob/master/analyzer-scheduler/README.md)
+-  [`job`](http://172.17.189.70/sonar/code-analyzer/-/blob/master/analyzer-job/README.md)
