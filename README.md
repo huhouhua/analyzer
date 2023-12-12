@@ -62,6 +62,7 @@ analyzer-scheduler: 调度组件，主要负责同步扫描任务仓库、调度
     systemctl daemon-reload
     systemctl start docker
   ```
+##### 5. sonarQube安装
 #### 二、SonarDockerfile文件定义
 SonarDockerfile这个文件主要做的事情就是扫描，analyzer基于这个文件而构建，所以这个文件必须得提前定义好。
 
@@ -84,7 +85,7 @@ USER root
 RUN mvn sonar:sonar --settings settings.xml -Dsonar.projectKey=appserver-sonar -Dmaven.test.skip=true -Dsonar.scm.disabled=true ${SONAR_ARGS}
 
 ```
-##### **前端**，这里以riil-insight-frontend为例，sonar-scanner 就是扫描命令。
+##### **前端**，这里以riil-insight-frontend为例，需要指定sonar-scanner命令。
 ``` dockerfile
 FROM 172.17.162.231/library/alpine-sonar:base
 ARG SONAR_ARGS
@@ -96,7 +97,8 @@ RUN sonar-scanner ${SONAR_ARGS}
 ```
 #### 三、配置存储扫描任务
 1. 打开git托管存储扫描仓库，如果没有的话，请创建仓库！
-2. 在任意的目录下，创建以yaml格式的文件，填写以下内容
+2. 在任意的目录下，创建以yaml格式的文件，填写以下内容，根据实际情况修改。
+3. 重点需要关注triggerTimeCron参数，这个参数是多久扫描一次，扫描的所有groups下所有的项目，平均一个项目扫描时间为1分钟以上，java项目平均需要2分钟以上，建议把时间设置长一些。
 ```yaml
 global:
   sonar:
@@ -241,6 +243,7 @@ sonar: #sonar服务端地址
 - java jdk1.8
 - IDEA 
 - docker
+- sonarQube
 
 ### 开发文档
 -  [`scheduler`](http://172.17.162.204/huhouhua/code-scanner/-/blob/master/analyzer-scheduler/README.md)
