@@ -1,4 +1,4 @@
-## analyzer-job
+## analyzer-job是什么？
  工作组件，用来扫描项目的，由analyzer-scheduler负责管理此组件，analyzer-scheduler通过启动analyzer-job容器的形式，通过环境变量，把项目、扫描任务等基础信息，传递给此组件，然后开始工作，工作完，会做一些镜像清理工作、以及扫描结果通知等。
 
 ## 具体做的事情
