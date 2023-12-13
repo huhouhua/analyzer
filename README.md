@@ -58,13 +58,13 @@ analyzer-scheduler: 调度组件，主要负责同步扫描任务仓库、调度
    }
    ```
 ##### 3. 开放docker服务端口
+  ``` shell
+   vi /usr/lib/systemd/system/docker.service
+  ```
    添加
    ``` service
      -H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock
    ```
-  ``` shell
-   vi /usr/lib/systemd/system/docker.service
-  ```
  ![docker.png](http://172.17.189.70/sonar/code-analyzer/-/raw/master/document/docker_20231211092949.png)
   
 ##### 4. 重启服务
