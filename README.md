@@ -96,7 +96,7 @@ SonarDockerfile这个文件主要做的事情就是扫描，analyzer基于这个
 1. 项目检查下是有**sonar-project.properties**文件，如果没有的话，那么需要创建此文件，定义下sonar相关配置信息。
 2. SonarDockerfile文件内容, **${SONAR_ARGS}** 这个变量必须要有，需要传递参数用，否则构建不了。
 
-#####  **后端**，这里以appserver为例，mvn sonar此命令就是用来扫描，这里指的是java，不同的编程语言，RUN指令 执行的命令不一样而以。
+#####  **后端**，这里以appserver为例，mvn sonar此命令就是用来扫描，这里指的是java，不同的编程语言，RUN指令里面执行的扫描命令不一样而以。
 ``` dockerfile
 FROM 172.17.162.231/insight/appserver:base-11 AS builder-java
 ENV WORKDIR=/java-build/
