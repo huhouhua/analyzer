@@ -210,7 +210,7 @@ sonar: #sonar服务端地址
 ```
 ### 3. 运行
 ``` shell
-  docker run -d --name analyzer-scheduler -v /root/analyzer/application-prod.yaml:/app/application-prod.yaml -v /var/run/docker.sock:/var/run/docker.sock 172.17.162.231/devops/analyzer-scheduler:1.0
+  docker run -d --name analyzer-scheduler --restart always  -v /root/analyzer/application-prod.yaml:/app/application-prod.yaml -v /var/run/docker.sock:/var/run/docker.sock 172.17.162.231/devops/analyzer-scheduler:1.0
 ```
 ### 高级用法
 #### 1. 扫描多存储扫描任务文件
